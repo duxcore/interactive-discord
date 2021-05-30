@@ -1,5 +1,5 @@
 import { Collection } from "discord.js";
-import { ComponentTypes } from "../util/types/components";
+import { ComponentObject, ComponentType, ComponentTypes } from "../util/types/components";
 
 export class ComponentActionRow {
   public components: ComponentTypes[] = [];
@@ -11,5 +11,15 @@ export class ComponentActionRow {
   addComponent(component: ComponentTypes): ComponentActionRow {
     this.components.push(component);
     return this;
+  }
+
+  compile(asString?: boolean): string | ComponentObject {
+    const object: ComponentObject = {
+      type: ComponentType.ActionRow,
+      components: this.components.map(comp => comp.compile(false)) as ComponentObject[]
+    };
+
+    if (!asString) return object;
+    else return JSON.stringify(object);
   }
 }

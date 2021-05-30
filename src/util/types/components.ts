@@ -2,10 +2,12 @@
  * MESSAGE COMPONENTS
  */
 
-import { ButtonComponent } from "../../structures/ButtonComponent";
+import { ButtonComponent } from "../../structures/buttons/ButtonComponent";
+import { LinkButtonComponent } from "../../structures/buttons/LinkButtonComponent";
 
 export type ComponentTypes = 
   | ButtonComponent
+  | LinkButtonComponent
 
  export enum ComponentType {
   ActionRow = 1,
