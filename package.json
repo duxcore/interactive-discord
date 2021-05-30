@@ -8,5 +8,12 @@
   "repository": "https://github.com/duxcore/interactive-discord.git",
   "scripts": {
     "build": "tsc"
+  },
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.0"
   }
 }
