@@ -1,0 +1,68 @@
+diff --git a/node_modules/discord.js/src/structures/APIMessage.js b/node_modules/discord.js/src/structures/APIMessage.js
+index 3451bdb..be98887 100644
+--- a/node_modules/discord.js/src/structures/APIMessage.js
++++ b/node_modules/discord.js/src/structures/APIMessage.js
+@@ -147,6 +147,7 @@ class APIMessage {
+     if (this.data) return this;
+ 
+     const content = this.makeContent();
++    const components = this.options.components;
+     const tts = Boolean(this.options.tts);
+ 
+     let nonce;
+@@ -204,6 +205,7 @@ class APIMessage {
+       nonce,
+       embed: this.options.embed === null ? null : embeds[0],
+       embeds,
++      components,
+       username,
+       avatar_url: avatarURL,
+       allowed_mentions: typeof content === 'undefined' ? undefined : allowedMentions,
+diff --git a/node_modules/discord.js/src/structures/Message.js b/node_modules/discord.js/src/structures/Message.js
+index 36c26f2..61c715b 100644
+--- a/node_modules/discord.js/src/structures/Message.js
++++ b/node_modules/discord.js/src/structures/Message.js
+@@ -78,6 +78,15 @@ class Message extends Base {
+       this.content = null;
+     }
+ 
++    if ('components' in data) {
++      /**
++       * The content of the message
++       * @type {?any}
++       */
++      this.components = data.components;
++    }
++
++
+     if ('author' in data) {
+       /**
+        * The author of the message
+@@ -180,9 +189,9 @@ class Message extends Base {
+      */
+     this.activity = data.activity
+       ? {
+-          partyID: data.activity.party_id,
+-          type: data.activity.type,
+-        }
++        partyID: data.activity.party_id,
++        type: data.activity.type,
++      }
+       : null;
+ 
+     /**
+@@ -218,10 +227,10 @@ class Message extends Base {
+      */
+     this.reference = data.message_reference
+       ? {
+-          channelID: data.message_reference.channel_id,
+-          guildID: data.message_reference.guild_id,
+-          messageID: data.message_reference.message_id,
+-        }
++        channelID: data.message_reference.channel_id,
++        guildID: data.message_reference.guild_id,
++        messageID: data.message_reference.message_id,
++      }
+       : null;
+   }
+ 
