@@ -1,7 +1,7 @@
 name: Publish to NPM
 on:
   push:
-    branches: [ dev ]
+    branches: [main]
   workflow_dispatch:
 jobs:
   npm-publish:
@@ -26,6 +26,6 @@ jobs:
           create_tag: "true"
           commit_pattern: "^Release (\\S+)"
           publish_args: "--non-interactive"
-        env: 
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
