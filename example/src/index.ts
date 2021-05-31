@@ -62,7 +62,7 @@ bot.on('message', (message) => {
                 interaction.respond({ content: 'Success Button Clicked', shouldEdit: true })
             })
             interactiveClient.addButtonListener(dangerbutton, (interaction) => {
-                interaction.respond({ content: 'Danger Button Clicked', components: newBtn, shouldEdit: true })
+                interaction.respond({ content: 'I will replace other buttons', components: newBtn, shouldEdit: true })
             })
 
             break
