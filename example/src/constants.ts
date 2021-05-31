@@ -16,7 +16,10 @@ export const dangerbutton = new ButtonComponent({
     style: 4,
     label: "Danger Button"
 })
-
+export const replacebutton = new ButtonComponent({
+    style: 4,
+    label: "I will replace all other buttons"
+})
 export const linkbutton = new LinkButtonComponent('https://duxcore.co', {
     style: 1,
     label: 'Link Button'
