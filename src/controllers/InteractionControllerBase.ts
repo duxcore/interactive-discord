@@ -1,6 +1,9 @@
-import { Guild, GuildMember } from "discord.js";
+import axios from 'axios';
+import { Guild, GuildMember, MessageEmbed } from "discord.js";
 import { InteractiveClient } from "../InteractiveClient";
-import { Message, RawInteractionObject } from "../util/types/interactions";
+import { InteractionResponse } from "../structures/InteractionResponse";
+import { discord } from '../util/constraints';
+import { InteractionResponseOptions, InteractionResponseType, Message, RawInteractionObject } from "../util/types/interactions";
 
 export class InteractionControllerBase {
   private _raw: RawInteractionObject;
@@ -47,7 +50,15 @@ export class InteractionControllerBase {
     return message ?? null;
   }
 
-  reply() {}  
-
-  respond() {}
+  respond(response: InteractionResponseOptions): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const responseObject = new InteractionResponse(response);
+      axios.post(`${discord.api_url}interactions/${this.id}/${this.token}/callback`, responseObject.compile())
+        .then(() => resolve())
+        .catch(dat => reject({
+          message: "An error has occured whilst trying to send a response...",
+          errors: dat.response.data.errors
+        }));
+    })
+  }
 }

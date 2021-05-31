@@ -1,9 +1,9 @@
 import { MessageEmbed } from "discord.js";
-import { ComponentObject } from "./components";
+import { ComponentObject, UniversalComponentType } from "./components";
 
 export interface RawInteractionObject {
   version: number;
-  type: number;
+  type: InteractionType;
   token: string;
   message?: Message;
   member: Member;
@@ -79,6 +79,12 @@ export interface OptionsEntity {
   name: string;
 }
 
+export enum InteractionType {
+  Ping = 1,
+  ApplicationCommand = 2,
+  MessageComponent = 3
+}
+
 export type AllowedMentionTypes = 
   | "roles"
   | "users"
@@ -102,7 +108,7 @@ export interface AllowedMentionsObj {
   replied_user: boolean
 }
 
-export enum InteractionCBType {
+export enum InteractionResponseType {
   Pong = 1,
   ChannelMessageWithSource = 4,
   DeferredChannelMessageWithSource = 5,
@@ -110,7 +116,7 @@ export enum InteractionCBType {
   UpdateMessage = 7
 }
 
-export interface CommandInteractionResponse {
+export interface InteractionResponseObject {
   type: number
   data: {
     tts?: boolean,
@@ -120,4 +126,14 @@ export interface CommandInteractionResponse {
     allowed_mentions?: AllowedMentionsObj,
     flags?: MessageFlags
   }
+}
+
+export interface InteractionResponseOptions {
+  tts?: boolean;
+  type?: InteractionResponseType;
+  content?: string,
+  embeds?: MessageEmbed[],
+  components?: UniversalComponentType,
+  allowedMentions?: AllowedMentionsObj,
+  isPrivate?: boolean  
 }
