@@ -5,12 +5,48 @@ export interface RawInteractionObject {
   version: number;
   type: number;
   token: string;
+  message?: Message;
   member: Member;
   id: string;
   guild_id: string;
   data: Data;
   channel_id: string;
   application_id: string;
+}
+export interface Message {
+  type: number;
+  tts: boolean;
+  timestamp: string;
+  pinned: boolean;
+  mentions?: (null)[] | null;
+  mention_roles?: (null)[] | null;
+  mention_everyone: boolean;
+  id: string;
+  flags: number;
+  embeds?: (null)[] | null;
+  edited_timestamp?: null;
+  content: string;
+  components?: (ComponentsEntity)[] | null;
+  channel_id: string;
+  author: AuthorOrUser;
+  attachments?: (null)[] | null;
+}
+export interface AuthorOrUser {
+  username: string;
+  public_flags: number;
+  id: string;
+  discriminator: string;
+  avatar: string;
+}
+export interface ComponentsEntity {
+  type: number;
+  components?: (ComponentsEntity1)[] | null;
+}
+export interface ComponentsEntity1 {
+  type: number;
+  label: string;
+  style: number;
+  custom_id: string;
 }
 export interface Member {
   user: User;
@@ -74,7 +110,7 @@ export enum InteractionCBType {
   UpdateMessage = 7
 }
 
-export interface InteractionResponse {
+export interface CommandInteractionResponse {
   type: number
   data: {
     tts?: boolean,
