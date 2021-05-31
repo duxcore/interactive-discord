@@ -1,3 +1,5 @@
+import { ButtonInteractionController } from "../../controllers/ButtonInteractionController";
+import { InteractiveClient } from "../../InteractiveClient";
 import { ButtonStyle, EmojiPartial } from "./components";
 
 export interface ButtonComponentOptions {
@@ -6,3 +8,5 @@ export interface ButtonComponentOptions {
   custom_id?: string,
   disabled?: boolean
 }
+
+export type ButtonListenerCallback = (interaction: ButtonInteractionController) => void;
