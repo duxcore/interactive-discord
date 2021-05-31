@@ -54,7 +54,9 @@ export class InteractionControllerBase {
     return new Promise((resolve, reject) => {
       const responseObject = new InteractionResponse(response);
       axios.post(`${discord.api_url}interactions/${this.id}/${this.token}/callback`, responseObject.compile())
-        .then(() => resolve())
+        .then(dat => {
+          resolve()
+        })
         .catch(dat => reject({
           message: "An error has occured whilst trying to send a response...",
           errors: dat.response.data.errors
