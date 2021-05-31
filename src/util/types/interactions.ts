@@ -87,7 +87,7 @@ export enum InteractionType {
   MessageComponent = 3
 }
 
-export type AllowedMentionTypes = 
+export type AllowedMentionTypes =
   | "roles"
   | "users"
   | "everyone"
@@ -137,5 +137,6 @@ export interface InteractionResponseOptions {
   embeds?: MessageEmbed[],
   components?: UniversalComponentType,
   allowedMentions?: AllowedMentionsObj,
-  isPrivate?: boolean  
+  isPrivate?: boolean;
+  shouldEdit?: boolean
 }
