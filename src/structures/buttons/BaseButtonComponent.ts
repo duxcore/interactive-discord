@@ -1,4 +1,4 @@
-import uuid from 'uuid';
+import * as uuid from 'uuid';
 import { ButtonComponentOptions } from "../../util/types/button";
 import { ButtonStyle } from "../../util/types/components";
 

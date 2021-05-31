@@ -10,7 +10,7 @@ export class ButtonComponent extends BaseButtonComponent {
 
   compile(asString?: boolean): ComponentObject | string {
     const compiledObject: ComponentObject = {
-      type: ComponentType.Button,
+      type: 2,
       custom_id: this.customId,
       style: this.style,
       label: this.label,

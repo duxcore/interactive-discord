@@ -1,11 +1,10 @@
-import { Collection } from "discord.js";
 import { ComponentObject, ComponentType, ComponentTypes } from "../util/types/components";
 
 export class ComponentActionRow {
   public components: ComponentTypes[] = [];
 
   constructor(...components: ComponentTypes[]) {
-    components.map(comp => components.push(comp));
+    components.map(comp => this.components.push(comp));
   }
 
   addComponent(component: ComponentTypes): ComponentActionRow {
@@ -15,7 +14,7 @@ export class ComponentActionRow {
 
   compile(asString?: boolean): string | ComponentObject {
     const object: ComponentObject = {
-      type: ComponentType.ActionRow,
+      type: 1,
       components: this.components.map(comp => comp.compile(false)) as ComponentObject[]
     };
 
