@@ -87,13 +87,13 @@ bot.on('message', (message) => {
 
         case "!multi-select":
 
-            const multiselecCluster = new ComponentCluster(multiselection)
+            const multiselectCluster = new ComponentCluster(multiselection)
 
 
             interactiveClient.sendComponents('Multi Selection', new ComponentCluster(multiselectbutton).compile() as string, message.channel as TextChannel)
 
             interactiveClient.addButtonListener(multiselectbutton, (interaction) => {
-                interaction.respond({ content: 'Multi Selection Button Clicked', components: multiselecCluster, isPrivate: true })
+                interaction.respond({ content: 'Multi Selection Button Clicked', components: multiselectCluster, isPrivate: true })
             })
 
             interactiveClient.addSelectionListener(multiselection, (interaction) => {
