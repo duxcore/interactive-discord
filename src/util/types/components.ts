@@ -6,11 +6,14 @@ import { ButtonComponent } from "../../structures/buttons/ButtonComponent";
 import { LinkButtonComponent } from "../../structures/buttons/LinkButtonComponent";
 import { ComponentActionRow } from "../../structures/ComponentActionRow";
 import { ComponentCluster } from "../../structures/ComponentCluster";
+import { SelectionComponent } from "../../structures/selections/SelectionComponent";
+import { SelectionComponentOption } from "./selection";
 
 export type ComponentTypes =
   | ButtonComponent
   | LinkButtonComponent
   | ComponentActionRow
+  | SelectionComponent
 
 export enum ComponentType {
   ActionRow = 1,
@@ -42,6 +45,12 @@ export interface ComponentObject {
   custom_id?: string, // A developer-defined identifier for the button (max 100 characters)
   url?: string, // A URL For link-style buttons
   disabled?: boolean // Is the button disabled? 
+
+  /** Selections Only */
+  placeholder?: string,
+  options?: SelectionComponentOption[],
+  min_values?: number,
+  max_values?: number
 }
 
 export type UniversalComponentType =

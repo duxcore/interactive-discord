@@ -74,6 +74,7 @@ export interface Data {
   id: string;
   custom_id: string;
   component_type: number;
+  values?: string[] | null
 }
 export interface OptionsEntity {
   value: string;

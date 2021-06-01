@@ -1,3 +1,4 @@
+import { SelectionComponent } from "./selections/SelectionComponent";
 import { ComponentObject, ComponentType } from "../util/types/components";
 import { ButtonComponent } from "./buttons/ButtonComponent";
 import { LinkButtonComponent } from "./buttons/LinkButtonComponent";
@@ -7,6 +8,7 @@ type GlobalComponentTypes =
   | ComponentActionRow
   | ButtonComponent
   | LinkButtonComponent
+  | SelectionComponent
 
 export class ComponentCluster {
   public components: GlobalComponentTypes[] = []

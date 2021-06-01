@@ -1,7 +1,7 @@
 import Discord, { TextChannel } from 'discord.js';
 import { config } from 'dotenv';
 import InteractiveClient, { ButtonComponent, ComponentCluster, LinkButtonComponent } from '@duxcore/interactive-discord';
-import { dangerbutton, killerbutton, linkbutton, primarybutton, replacebutton, reviverbutton, secondarybutton, successbutton } from './constants';
+import { dangerbutton, killerbutton, linkbutton, primarybutton, replacebutton, reviverbutton, secondarybutton, selectionbutton, successbutton, basicselection, multiselection, multiselectbutton } from './constants';
 import { ComponentObject } from '@duxcore/interactive-discord/lib/util/types/components';
 
 config();
@@ -61,6 +61,43 @@ bot.on('message', (message) => {
             })
             interactiveClient.addButtonListener(reviverbutton, (interaction) => {
                 interaction.respond({ content: 'Buttons', components: editableButtonCluster, shouldEdit: true });
+            })
+
+            break
+
+        case "!selection":
+
+            const selectionCluster = new ComponentCluster(basicselection)
+
+
+            interactiveClient.sendComponents('Selections', new ComponentCluster(selectionbutton).compile() as string, message.channel as TextChannel)
+
+            interactiveClient.addButtonListener(selectionbutton, (interaction) => {
+                interaction.respond({ content: 'Selection Button Clicked', components: selectionCluster, isPrivate: true })
+            })
+
+            interactiveClient.addSelectionListener(basicselection, (interaction) => {
+
+                interaction.respond({ content: `Selected: ${interaction.selections?.join(",")}`, isPrivate: true })
+            })
+
+
+
+            break
+
+        case "!multi-select":
+
+            const multiselecCluster = new ComponentCluster(multiselection)
+
+
+            interactiveClient.sendComponents('Multi Selection', new ComponentCluster(multiselectbutton).compile() as string, message.channel as TextChannel)
+
+            interactiveClient.addButtonListener(multiselectbutton, (interaction) => {
+                interaction.respond({ content: 'Multi Selection Button Clicked', components: multiselecCluster, isPrivate: true })
+            })
+
+            interactiveClient.addSelectionListener(multiselection, (interaction) => {
+                interaction.respond({ content: `Selected: ${interaction.selections?.join(",")}`, isPrivate: true })
             })
 
             break
