@@ -1,2 +1,17 @@
 # interactive-discord
+
 This is a package that will allow you to seamlessly integrate discord interactions into your [discord.js](https://discord.js.org/) bot.
+
+#### Adds support for:
+
+- Buttons
+
+  - Creating and sending buttons
+  - Responding to buttons
+
+- Selection Menus
+
+  - Creating and sending selection menus
+  - Responding to selection menus
+
+> **NOTE:** Selection menus are currently in beta and hence only people with the experiment `Bot UI Kit Select` enabled can see and interact with them
