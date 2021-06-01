@@ -4,6 +4,7 @@ import { SelectionComponent } from ".";
 import { ButtonInteractionController } from "./controllers/ButtonInteractionController";
 import { SelectionInteractionController } from "./controllers/SelectionInteractionController";
 import { ButtonComponent } from "./structures/buttons/ButtonComponent";
+import { getChannelPerms } from "./util/channel";
 import { ButtonListenerCallback } from "./util/types/button";
 import { UniversalComponentType } from "./util/types/components";
 import { Events } from "./util/types/events";
@@ -69,7 +70,7 @@ export class InteractiveClient extends TypedEmitter<Events> {
           topic: channel.topic,
           rate_limit_per_user: channel.rateLimitPerUser,
           position: channel.position,
-          permission_overwrites: channel.permissionOverwrites.toJSON(),
+          permission_overwrites: getChannelPerms(channel),
           nsfw: channel.nsfw,
           name: channel.name,
           last_message_id: channel.lastMessageID,
@@ -88,7 +89,7 @@ export class InteractiveClient extends TypedEmitter<Events> {
           topic: channel.topic,
           rate_limit_per_user: 0,
           position: channel.position,
-          permission_overwrites: channel.permissionOverwrites.toJSON(),
+          permission_overwrites: getChannelPerms(channel),
           nsfw: channel.nsfw,
           name: channel.name,
           last_message_id: channel.lastMessageID,
