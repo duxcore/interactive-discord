@@ -7,12 +7,12 @@ import { LinkButtonComponent } from "../../structures/buttons/LinkButtonComponen
 import { ComponentActionRow } from "../../structures/ComponentActionRow";
 import { ComponentCluster } from "../../structures/ComponentCluster";
 
-export type ComponentTypes = 
+export type ComponentTypes =
   | ButtonComponent
   | LinkButtonComponent
   | ComponentActionRow
 
- export enum ComponentType {
+export enum ComponentType {
   ActionRow = 1,
   Button = 2
 }
@@ -44,7 +44,7 @@ export interface ComponentObject {
   disabled?: boolean // Is the button disabled? 
 }
 
-export type UniversalComponentType = 
+export type UniversalComponentType =
   | ComponentTypes
   | ComponentCluster
   | Array<ComponentTypes>

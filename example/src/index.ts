@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import Discord, { TextChannel } from 'discord.js';
 import { config } from 'dotenv';
 import InteractiveClient, { ButtonComponent, ComponentCluster, LinkButtonComponent } from '@duxcore/interactive-discord';
 import { dangerbutton, killerbutton, linkbutton, primarybutton, replacebutton, reviverbutton, secondarybutton, successbutton } from './constants';
@@ -23,8 +23,7 @@ bot.on('message', (message) => {
         case "!buttons":
             const buttonCluster = new ComponentCluster(primarybutton, secondarybutton, successbutton, dangerbutton, linkbutton)
 
-            // @ts-ignore
-            message.channel.send({ content: 'Buttons', components: buttonCluster.compile() });
+            interactiveClient.sendComponents('Buttons', buttonCluster.compile() as string, message.channel as TextChannel)
 
             interactiveClient.addButtonListener(primarybutton, (interaction) => {
                 interaction.respond({ content: 'Primary Button Clicked', isPrivate: true })
@@ -43,10 +42,7 @@ bot.on('message', (message) => {
         case "!editable-buttons":
             const editableButtonCluster = new ComponentCluster(primarybutton, secondarybutton, successbutton, replacebutton, linkbutton)
 
-
-
-            // @ts-ignore
-            message.channel.send({ content: 'Buttons', components: editableButtonCluster.compile() });
+            interactiveClient.sendComponents('Buttons', editableButtonCluster.compile() as string, message.channel as TextChannel)
 
             interactiveClient.addButtonListener(primarybutton, (interaction) => {
                 interaction.respond({ content: 'Primary Button Clicked', shouldEdit: true })
@@ -67,18 +63,12 @@ bot.on('message', (message) => {
                 interaction.respond({ content: 'Buttons', components: editableButtonCluster, shouldEdit: true });
             })
 
-
-
             break
 
         default:
             break;
     }
 })
-
-// interactiveClient.on('buttonInteraction', (interaction) => {
-
-// })
 
 
 bot.login(process.env.TOKEN);

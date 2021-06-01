@@ -3,7 +3,7 @@ import { ButtonComponent } from "./buttons/ButtonComponent";
 import { LinkButtonComponent } from "./buttons/LinkButtonComponent";
 import { ComponentActionRow } from "./ComponentActionRow";
 
-type GlobalComponentTypes = 
+type GlobalComponentTypes =
   | ComponentActionRow
   | ButtonComponent
   | LinkButtonComponent

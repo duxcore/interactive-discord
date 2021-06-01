@@ -1,8 +1,9 @@
-import { Client, Collection } from "discord.js";
+import { Client, Collection, TextChannel } from "discord.js";
 import { TypedEmitter } from 'tiny-typed-emitter';
 import { ButtonInteractionController } from "./controllers/ButtonInteractionController";
 import { ButtonComponent } from "./structures/buttons/ButtonComponent";
 import { ButtonListenerCallback } from "./util/types/button";
+import { UniversalComponentType } from "./util/types/components";
 import { Events } from "./util/types/events";
 import { InteractionType, RawInteractionObject } from "./util/types/interactions";
 
@@ -44,5 +45,24 @@ export class InteractiveClient extends TypedEmitter<Events> {
 
   addSingleButtonListener(button: ButtonComponent, callback: ButtonListenerCallback) {
     this._singleButtonListeners.set(button.customId, callback);
+  }
+  sendComponents(content: string, compiledComponents: string, channel: TextChannel) {
+    const data = {
+      type: channel.type,
+      topic: channel.topic,
+      rate_limit_per_user: channel.rateLimitPerUser,
+      position: channel.position,
+      permission_overwrites: channel.permissionOverwrites.toJSON(),
+      nsfw: channel.nsfw,
+      name: channel.name,
+      last_message_id: channel.lastMessageID,
+      id: channel.id
+
+    }
+    const newChannel = new TextChannel(channel.guild, data)
+    newChannel.send({
+      content,
+      components: compiledComponents
+    })
   }
 }
