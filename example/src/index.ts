@@ -64,9 +64,6 @@ bot.on('message', (message) => {
             })
 
             break
-
-        default:
-            break;
     }
 })
 
