@@ -2,6 +2,7 @@
  * MESSAGE COMPONENTS
  */
 
+import { DMChannel, MessageEmbed, NewsChannel, TextChannel } from "discord.js";
 import { ButtonComponent } from "../../structures/buttons/ButtonComponent";
 import { LinkButtonComponent } from "../../structures/buttons/LinkButtonComponent";
 import { ComponentActionRow } from "../../structures/ComponentActionRow";
@@ -57,3 +58,10 @@ export type UniversalComponentType =
   | ComponentTypes
   | ComponentCluster
   | Array<ComponentTypes>
+
+export interface SendComponentsOptions {
+  content: string;
+  embed?: MessageEmbed;
+  components: UniversalComponentType;
+  channel: TextChannel | DMChannel | NewsChannel
+}

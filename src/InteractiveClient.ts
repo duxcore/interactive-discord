@@ -1,12 +1,14 @@
-import { Client, Collection, DMChannel, NewsChannel, TextChannel } from "discord.js";
+import { APIMessageContentResolvable, Client, Collection, DMChannel, MessageAdditions, MessageOptions, NewsChannel, TextChannel } from "discord.js";
 import { TypedEmitter } from 'tiny-typed-emitter';
 import { SelectionComponent } from ".";
 import { ButtonInteractionController } from "./controllers/ButtonInteractionController";
 import { SelectionInteractionController } from "./controllers/SelectionInteractionController";
 import { ButtonComponent } from "./structures/buttons/ButtonComponent";
+import { ComponentCluster } from "./structures/ComponentCluster";
 import { getChannelPerms } from "./util/channel";
+import compileComponents from "./util/compileComponents";
 import { ButtonListenerCallback } from "./util/types/button";
-import { UniversalComponentType } from "./util/types/components";
+import { SendComponentsOptions, UniversalComponentType } from "./util/types/components";
 import { Events } from "./util/types/events";
 import { InteractionType, RawInteractionObject } from "./util/types/interactions";
 import { SelectionListenerCallback } from "./util/types/selection";
@@ -61,7 +63,16 @@ export class InteractiveClient extends TypedEmitter<Events> {
     this._selectionListeners.set(selection.customId, callback);
   }
 
-  sendComponents(content: string, compiledComponents: string, channel: TextChannel | DMChannel | NewsChannel) {
+  sendComponents({channel, components, content, embed}: SendComponentsOptions) {
+
+    const cluster = compileComponents(components);
+    
+    let senderOpts: APIMessageContentResolvable | MessageAdditions | MessageOptions = {
+      content,
+      components: cluster.compile(true) as string,
+    }
+
+    if (embed) senderOpts.embed = embed;
 
     switch (channel.type) {
       case "text":
@@ -77,10 +88,7 @@ export class InteractiveClient extends TypedEmitter<Events> {
           id: channel.id
 
         })
-        newTextChannel.send({
-          content,
-          components: compiledComponents
-        })
+        newTextChannel.send(senderOpts);
       break;
 
       case "news":
@@ -94,12 +102,8 @@ export class InteractiveClient extends TypedEmitter<Events> {
           name: channel.name,
           last_message_id: channel.lastMessageID,
           id: channel.id
-
-        })
-        newNewsChannel.send({
-          content,
-          components: compiledComponents
-        })
+        });
+        newNewsChannel.send(senderOpts)
       break;
 
       case "dm":
@@ -109,10 +113,7 @@ export class InteractiveClient extends TypedEmitter<Events> {
           last_message_id: channel.lastMessageID,
           id: channel.id
         })
-        newDmChannel.send({
-          content,
-          components: compiledComponents
-        })
+        newDmChannel.send(senderOpts);
       break;
 
     }
