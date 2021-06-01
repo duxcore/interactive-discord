@@ -20,7 +20,10 @@ export const replacebutton = new ButtonComponent({
     style: 4,
     label: "I will replace all other buttons"
 })
+export const killerbutton = new ButtonComponent({ style: 4, label: 'I replaced the others' });
+export const reviverbutton = new ButtonComponent({ style: 3, label: 'Bring them back!' });
 export const linkbutton = new LinkButtonComponent('https://duxcore.co', {
     style: 1,
     label: 'Link Button'
 })
+
