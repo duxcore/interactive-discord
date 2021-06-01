@@ -1,5 +1,6 @@
 import { InteractiveClient } from "./InteractiveClient";
 import { ButtonComponent } from "./structures/buttons/ButtonComponent";
+import { SelectionComponent } from "./structures/selections/SelectionComponent";
 import { LinkButtonComponent } from "./structures/buttons/LinkButtonComponent";
 import { ComponentActionRow } from "./structures/ComponentActionRow";
 import { ComponentCluster } from "./structures/ComponentCluster";
@@ -13,5 +14,6 @@ export {
   LinkButtonComponent,
   ComponentCluster,
   ComponentType,
-  ButtonStyle
+  ButtonStyle,
+  SelectionComponent
 }
