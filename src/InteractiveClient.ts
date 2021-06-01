@@ -1,10 +1,10 @@
 import { APIMessageContentResolvable, Client, Collection, DMChannel, MessageAdditions, MessageOptions, NewsChannel, TextChannel } from "discord.js";
 import { TypedEmitter } from 'tiny-typed-emitter';
 import { SelectionComponent } from ".";
+import { Commands } from "./classes/Commands";
 import { ButtonInteractionController } from "./controllers/ButtonInteractionController";
 import { SelectionInteractionController } from "./controllers/SelectionInteractionController";
 import { ButtonComponent } from "./structures/buttons/ButtonComponent";
-import { ComponentCluster } from "./structures/ComponentCluster";
 import { getChannelPerms } from "./util/channel";
 import compileComponents from "./util/compileComponents";
 import { ButtonListenerCallback } from "./util/types/button";
@@ -15,14 +15,18 @@ import { SelectionListenerCallback } from "./util/types/selection";
 
 export class InteractiveClient extends TypedEmitter<Events> {
   public bot: Client;
-  public applicationId: string;
 
   private _buttonListeners = new Collection<string, ButtonListenerCallback>();
   private _singleButtonListeners = new Collection<string, ButtonListenerCallback>();
   private _selectionListeners = new Collection<string, SelectionListenerCallback>();
 
-  constructor(bot: Client, applicationId: string) {
+  public commands: Commands;
+
+  constructor(bot: Client) {
     super();
+
+    this.bot = bot;
+    this.commands = new Commands(this);
 
     // @ts-ignore
     bot.ws.on("INTERACTION_CREATE", (interaction: RawInteractionObject) => {
@@ -46,9 +50,6 @@ export class InteractiveClient extends TypedEmitter<Events> {
         });
       }
     })
-
-    this.bot = bot;
-    this.applicationId = applicationId;
   }
 
   addButtonListener(button: ButtonComponent, callback: ButtonListenerCallback) {
@@ -67,6 +68,8 @@ export class InteractiveClient extends TypedEmitter<Events> {
 
     const cluster = compileComponents(components);
     
+    console.log(cluster)
+
     let senderOpts: APIMessageContentResolvable | MessageAdditions | MessageOptions = {
       content,
       components: cluster.compile(true) as string,

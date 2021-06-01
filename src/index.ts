@@ -1,19 +1,11 @@
 import { InteractiveClient } from "./InteractiveClient";
-import { ButtonComponent } from "./structures/buttons/ButtonComponent";
-import { SelectionComponent } from "./structures/selections/SelectionComponent";
-import { LinkButtonComponent } from "./structures/buttons/LinkButtonComponent";
-import { ComponentActionRow } from "./structures/ComponentActionRow";
-import { ComponentCluster } from "./structures/ComponentCluster";
-import { ButtonStyle, ComponentType } from "./util/types/components";
 
-export default InteractiveClient
+export { ButtonComponent } from "./structures/buttons/ButtonComponent";
+export { SelectionComponent } from "./structures/selections/SelectionComponent";
+export { LinkButtonComponent } from "./structures/buttons/LinkButtonComponent";
+export { ComponentActionRow } from "./structures/ComponentActionRow";
+export { ComponentCluster } from "./structures/ComponentCluster";
+export { ButtonStyle, ComponentType } from "./util/types/components";
+export { SlashCommand } from './structures/SlashCommand';
 
-export {
-  ButtonComponent,
-  ComponentActionRow,
-  LinkButtonComponent,
-  ComponentCluster,
-  ComponentType,
-  ButtonStyle,
-  SelectionComponent
-}
+export default InteractiveClient;

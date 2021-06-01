@@ -10,5 +10,7 @@ export default function compileComponents(components: UniversalComponentType): C
     return cluster
   })();
 
+  console.log(compiledComponents)
+
   return compiledComponents;
 }

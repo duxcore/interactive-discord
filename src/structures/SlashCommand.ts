@@ -1,9 +1,12 @@
-import { ApplicationCommandOption, NewCommandOptions } from "../util/types/command";
+import { Snowflake } from "discord.js";
+import { ApplicationCommandOption, ApplicationCommandPermissions, NewCommandOptions } from "../util/types/command";
 
-export class SlashCommands {
+export class SlashCommand {
   private _name: string;
   private _description: string;
 
+  private _guilds: Snowflake | Snowflake[] | null = null;
+  private _permissions: ApplicationCommandPermissions[];
   private _options: ApplicationCommandOption[];
   private _defaultPermission: boolean;
 
@@ -11,19 +14,19 @@ export class SlashCommands {
     this._name = options.name;
     this._description = options.description;
 
+    if (options.guilds) this._guilds = options.guilds;
+    this._permissions = options.permissions ?? [];
     this._options = options.options ?? [];
     this._defaultPermission = options.default_permissions ?? true;
   }
 
-  setName(name: string): this {
-    this._name = name;
-    return this;
-  }
+  get name(): string { return this._name; }
+  get description(): string { return this._description; }
 
-  setDescription(desc: string): this {
-    this._description = desc;
-    return this;
-  }
+  get guilds(): Snowflake | Snowflake[] | null { return this._guilds; }
+  get permissions(): ApplicationCommandPermissions[] { return this._permissions; }
+  get options(): ApplicationCommandOption[] { return this._options;}
+  get defaultPermission(): boolean { return this._defaultPermission; }
 
   compile(): NewCommandOptions {
     const cmd: NewCommandOptions = {
@@ -31,6 +34,7 @@ export class SlashCommands {
       description: this._description,
 
       options: this._options,
+      permissions: this._permissions,
       default_permissions: this._defaultPermission
     }
 
