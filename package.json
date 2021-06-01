@@ -2,23 +2,32 @@
   "name": "@duxcore/interactive-discord",
   "author": "Jackson Roberts <jackson@holopanio.com>",
   "description": "A package that will allow you to seamlessly integrate discord interactions into your bot.",
+<<<<<<< HEAD
+  "version": "1.0.14",
+=======
   "version": "1.0.12",
+>>>>>>> 21c3a21beaa7f314c10e03ac7cf237693b796697
   "license": "GPL-3.0",
   "main": "lib/index",
   "private": false,
   "repository": "https://github.com/duxcore/interactive-discord.git",
   "scripts": {
     "build": "tsc",
-    "postinstall": "tsc"
+    "postinstall": "patch-package && tsc"
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "discord.js": "^12.5.3",
+    "discord.js": "12.5.2",
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0",
     "tiny-typed-emitter": "^2.0.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
-    "@types/uuid": "^8.3.0"
+    "@types/node": "^15.6.1",
+    "@types/uuid": "^8.3.0",
+    "tsc": "^2.0.3",
+    "typescript": "^4.3.2"
   }
 }

@@ -6,6 +6,7 @@ import { ComponentCluster } from "./ComponentCluster";
 export class InteractionResponse {
   private _useTTS: boolean;
   private _private: boolean;
+  private _edit: boolean;
   private _type: InteractionResponseType;
 
   private _content: string;
@@ -16,8 +17,9 @@ export class InteractionResponse {
   constructor(options: InteractionResponseOptions) {
     this._useTTS = options.tts ?? false;
     this._private = options.isPrivate ?? false;
+    this._edit = options.shouldEdit ?? false;
     this._type = options.type ?? InteractionResponseType.ChannelMessageWithSource;
-    
+
     this._content = options.content ?? "";
     this._embeds = options.embeds ?? [];
     this._components = options.components ?? null;
@@ -26,6 +28,7 @@ export class InteractionResponse {
 
   get useTTS(): boolean { return this._useTTS; }
   get isPrivate(): boolean { return this._private; }
+  get isEdit(): boolean { return this._edit; }
 
   get content(): string { return this._content; }
   get embeds(): MessageEmbed[] { return this._embeds; }
@@ -49,7 +52,7 @@ export class InteractionResponse {
 
   compile(): InteractionResponseObject {
     let responseObject: InteractionResponseObject = {
-      type: this._type,
+      type: this._edit ? InteractionResponseType.UpdateMessage : this._type,
       data: {
         content: this._content,
         tts: this._useTTS,
