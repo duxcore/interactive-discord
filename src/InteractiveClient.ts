@@ -1,20 +1,20 @@
-import { APIMessageContentResolvable, Client, Collection, DMChannel, MessageAdditions, MessageOptions, NewsChannel, TextChannel } from "discord.js";
-import { TypedEmitter } from 'tiny-typed-emitter';
 import { SelectionComponent } from ".";
+import { TypedEmitter } from 'tiny-typed-emitter';
+import { Events } from "./util/types/events";
 import { Commands } from "./classes/Commands";
+import { getChannelPerms } from "./util/channel";
+import { SlashCommand } from "./structures/SlashCommand";
+import compileComponents from "./util/compileComponents";
+import { ButtonListenerCallback } from "./util/types/button";
+import { SendComponentsOptions } from "./util/types/components";
+import { SelectionListenerCallback } from "./util/types/selection";
+import { ButtonComponent } from "./structures/buttons/ButtonComponent";
+import { ApplicationCommandEventCallback } from "./util/types/command";
+import { InteractionType, RawInteractionObject } from "./util/types/interactions";
 import { ButtonInteractionController } from "./controllers/ButtonInteractionController";
 import { CommandInteractionController } from "./controllers/CommandInteractionController";
 import { SelectionInteractionController } from "./controllers/SelectionInteractionController";
-import { ButtonComponent } from "./structures/buttons/ButtonComponent";
-import { SlashCommand } from "./structures/SlashCommand";
-import { getChannelPerms } from "./util/channel";
-import compileComponents from "./util/compileComponents";
-import { ButtonListenerCallback } from "./util/types/button";
-import { ApplicationCommandEventCallback } from "./util/types/command";
-import { SendComponentsOptions } from "./util/types/components";
-import { Events } from "./util/types/events";
-import { InteractionType, RawInteractionObject } from "./util/types/interactions";
-import { SelectionListenerCallback } from "./util/types/selection";
+import { APIMessageContentResolvable, Client, Collection, DMChannel, MessageAdditions, MessageOptions, NewsChannel, TextChannel } from "discord.js";
 
 export class InteractiveClient extends TypedEmitter<Events> {
   public bot: Client;
