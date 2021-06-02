@@ -16,6 +16,7 @@ export class CommandController {
   }
 
   get id(): string { return this._commandDat.id; }
+  get name(): string { return this._commandDat.name; }
   get command(): SlashCommand { return this._command; }
 
   public async update(cmd: SlashCommand): Promise<this> {
