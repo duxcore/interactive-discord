@@ -7,7 +7,7 @@ import { ApplicationCommand } from "./types/command";
 export default function registerCommand(cmd: SlashCommand, client: InteractiveClient): Promise<ApplicationCommand> {
   return new Promise(async (resolve, reject) => {
     const application = (await client.bot.fetchApplication());
-    const appurl = `${discord.api_url}applications/${application.id}`
+    const appurl = `${discord.api_url}/applications/${application.id}`
     const isGlobal = (!cmd.guilds || cmd.guilds.length == 0);
 
     if (isGlobal) {
