@@ -1,19 +1,13 @@
 import { SelectionComponent } from "./selections/SelectionComponent";
-import { ComponentObject, ComponentType } from "../util/types/components";
+import { ComponentObject, ComponentType, ComponentTypes } from "../util/types/components";
 import { ButtonComponent } from "./buttons/ButtonComponent";
 import { LinkButtonComponent } from "./buttons/LinkButtonComponent";
 import { ComponentActionRow } from "./ComponentActionRow";
 
-type GlobalComponentTypes =
-  | ComponentActionRow
-  | ButtonComponent
-  | LinkButtonComponent
-  | SelectionComponent
-
 export class ComponentCluster {
-  public components: GlobalComponentTypes[] = []
+  public components: ComponentTypes[] = []
 
-  constructor(...components: GlobalComponentTypes[]) {
+  constructor(...components: ComponentTypes[]) {
     components.map(comp => this.components.push(comp));
   }
 

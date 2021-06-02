@@ -7,7 +7,7 @@ import { ComponentObject } from '@duxcore/interactive-discord/lib/util/types/com
 config();
 const bot = new Discord.Client();
 
-const interactiveClient = new InteractiveClient(bot, bot.user?.id || "")
+const interactiveClient = new InteractiveClient(bot)
 
 
 
@@ -23,7 +23,11 @@ bot.on('message', (message) => {
         case "!buttons":
             const buttonCluster = new ComponentCluster(primarybutton, secondarybutton, successbutton, dangerbutton, linkbutton)
 
-            interactiveClient.sendComponents('Buttons', buttonCluster.compile() as string, message.channel)
+            interactiveClient.sendComponents({
+                channel: message.channel,
+                components: buttonCluster,
+                content: 'Buttons'
+            })
 
             interactiveClient.addButtonListener(primarybutton, (interaction) => {
                 interaction.respond({ content: 'Primary Button Clicked', isPrivate: true })
@@ -42,8 +46,11 @@ bot.on('message', (message) => {
         case "!editable-buttons":
             const editableButtonCluster = new ComponentCluster(primarybutton, secondarybutton, successbutton, replacebutton, linkbutton)
 
-            interactiveClient.sendComponents('Buttons', editableButtonCluster.compile() as string, message.channel)
-
+            interactiveClient.sendComponents({
+                channel: message.channel,
+                components: editableButtonCluster,
+                content: 'Buttons'
+            })
             interactiveClient.addButtonListener(primarybutton, (interaction) => {
                 interaction.respond({ content: 'Primary Button Clicked', shouldEdit: true })
             })
@@ -69,8 +76,11 @@ bot.on('message', (message) => {
 
             const selectionCluster = new ComponentCluster(basicselection)
 
-
-            interactiveClient.sendComponents('Selections', new ComponentCluster(selectionbutton).compile() as string, message.channel)
+            interactiveClient.sendComponents({
+                channel: message.channel,
+                components: new ComponentCluster(selectionbutton),
+                content: 'Selections'
+            })
 
             interactiveClient.addButtonListener(selectionbutton, (interaction) => {
                 interaction.respond({ content: 'Selection Button Clicked', components: selectionCluster, isPrivate: true })
@@ -89,8 +99,11 @@ bot.on('message', (message) => {
 
             const multiselectCluster = new ComponentCluster(multiselection)
 
-
-            interactiveClient.sendComponents('Multi Selection', new ComponentCluster(multiselectbutton).compile() as string, message.channel)
+            interactiveClient.sendComponents({
+                channel: message.channel,
+                components: new ComponentCluster(multiselectbutton),
+                content: 'Multi Selection'
+            })
 
             interactiveClient.addButtonListener(multiselectbutton, (interaction) => {
                 interaction.respond({ content: 'Multi Selection Button Clicked', components: multiselectCluster, isPrivate: true })
