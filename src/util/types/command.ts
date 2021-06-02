@@ -1,4 +1,5 @@
 import { Snowflake } from "discord.js";
+import { CommandInteractionController } from "../../controllers/CommandInteractionController";
 
 export enum ApplicationCommandOptionType {
   SUB_COMMAND = 1,
@@ -61,3 +62,5 @@ export interface ApplicationCommandPermissions {
   type: ApplicationCommandPermissionType; // Role Or User
   permission: boolean // Is this user/role allowed?
 }
+
+export type ApplicationCommandEventCallback = (interaction: CommandInteractionController) => void;

@@ -3,11 +3,14 @@ import { TypedEmitter } from 'tiny-typed-emitter';
 import { SelectionComponent } from ".";
 import { Commands } from "./classes/Commands";
 import { ButtonInteractionController } from "./controllers/ButtonInteractionController";
+import { CommandInteractionController } from "./controllers/CommandInteractionController";
 import { SelectionInteractionController } from "./controllers/SelectionInteractionController";
 import { ButtonComponent } from "./structures/buttons/ButtonComponent";
+import { SlashCommand } from "./structures/SlashCommand";
 import { getChannelPerms } from "./util/channel";
 import compileComponents from "./util/compileComponents";
 import { ButtonListenerCallback } from "./util/types/button";
+import { ApplicationCommandEventCallback } from "./util/types/command";
 import { SendComponentsOptions } from "./util/types/components";
 import { Events } from "./util/types/events";
 import { InteractionType, RawInteractionObject } from "./util/types/interactions";
@@ -19,6 +22,7 @@ export class InteractiveClient extends TypedEmitter<Events> {
   private _buttonListeners = new Collection<string, ButtonListenerCallback>();
   private _singleButtonListeners = new Collection<string, ButtonListenerCallback>();
   private _selectionListeners = new Collection<string, SelectionListenerCallback>();
+  private _commandListeners = new Collection<string, ApplicationCommandEventCallback>();
 
   public commands: Commands;
 
@@ -65,7 +69,13 @@ export class InteractiveClient extends TypedEmitter<Events> {
         }
       }
       if (interaction.type == InteractionType.ApplicationCommand) {
-        console.log(interaction);
+        const cmdInteraction = new CommandInteractionController(interaction, this);
+
+        this._commandListeners.map((cb, key) => {
+          if (interaction.data.name == key) return cb(cmdInteraction)
+        })
+
+        this.emit("commandInteraction", cmdInteraction)
       }
     })
   }
@@ -80,6 +90,10 @@ export class InteractiveClient extends TypedEmitter<Events> {
 
   addSelectionListener(selection: SelectionComponent, callback: SelectionListenerCallback) {
     this._selectionListeners.set(selection.customId, callback);
+  }
+
+  addCommandListener(cmd: SlashCommand, callback: ApplicationCommandEventCallback) {
+    this._commandListeners.set(cmd.name, callback);
   }
 
   sendComponents({ channel, components, content, embed }: SendComponentsOptions) {

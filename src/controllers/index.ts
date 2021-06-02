@@ -1,3 +1,3 @@
 export * from './ButtonInteractionController';
-export * from './CommandInteractionController';
+export * from './CommandController';
 export * from './SelectionInteractionController';

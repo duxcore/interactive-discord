@@ -6,9 +6,9 @@ import { discord } from '../util/constraints';
 import { InteractionResponseOptions, InteractionResponseType, Message, RawInteractionObject } from "../util/types/interactions";
 
 export class InteractionControllerBase {
+  public client: InteractiveClient;
   private _raw: RawInteractionObject;
-  private _client: InteractiveClient;
-
+  
   private _version: number;
   private _type: number;
   private _token: string;
@@ -19,7 +19,7 @@ export class InteractionControllerBase {
 
   constructor(raw: RawInteractionObject, client: InteractiveClient) {
     this._raw = raw;
-    this._client = client;
+    this.client = client;
 
     this._version = raw.version;
     this._type = raw.type;
@@ -36,12 +36,12 @@ export class InteractionControllerBase {
   get token(): string { return this._token; }
 
   get guild(): Guild | null {
-    const guild = this._client.bot.guilds.cache.get(this._guildId);
+    const guild = this.client.bot.guilds.cache.get(this._guildId);
     return guild ?? null;
   }
 
   get member(): GuildMember | null {
-    const guild = this._client.bot.guilds.cache.get(this._guildId);
+    const guild = this.client.bot.guilds.cache.get(this._guildId);
     const member = guild?.members.cache.get(this._raw.member.user.id);
 
     return member ?? null;
