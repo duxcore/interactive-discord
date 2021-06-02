@@ -6,6 +6,12 @@ This is a package that will allow you to seamlessly integrate discord interactio
 
 #### Adds support for:
 
+- Slash Commands
+
+  - Creating slash commands
+  - Responding to slash commands
+  - Editing/Deleting slash commands
+
 - Buttons
 
   - Creating and sending buttons
