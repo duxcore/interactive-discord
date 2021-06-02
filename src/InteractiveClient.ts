@@ -33,20 +33,29 @@ export class InteractiveClient extends TypedEmitter<Events> {
       if (interaction.type == InteractionType.MessageComponent) {
         const btnController = new ButtonInteractionController(interaction, this)
         const selController = new SelectionInteractionController(interaction, this)
+        btnController.setisHandled(false);
+        selController.setisHandled(false);
         this.emit("buttonInteraction", btnController);
         this._buttonListeners.map((cb, key) => {
-          if (btnController.customId == key) return cb(btnController);
+          if (btnController.customId == key) {
+            btnController.setisHandled(true);
+            return cb(btnController)
+          };
         });
 
         this._singleButtonListeners.map((cb, key) => {
           if (btnController.customId == key) {
+            btnController.setisHandled(true);
             this._singleButtonListeners.delete(key);
             return cb(btnController);
           }
         });
 
         this._selectionListeners.map((cs, key) => {
-          if (selController.customId == key) return cs(selController);
+          if (selController.customId == key) {
+            selController.setisHandled(true);
+            return cs(selController)
+          };
         });
       }
     })
