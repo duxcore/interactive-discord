@@ -7,7 +7,7 @@ export class ButtonInteractionController extends InteractionControllerBase {
 
   constructor(raw: RawInteractionObject, client: InteractiveClient) {
     super(raw, client);
-    this._customId = raw.data.custom_id
+    this._customId = raw.data.custom_id || ""
   }
 
   get customId(): string { return this._customId; }
