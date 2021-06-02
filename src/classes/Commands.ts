@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Collection, Snowflake } from "discord.js";
 import InteractiveClient from "..";
-import { CommandController } from "../controllers/CommandController";
+import { CommandController } from "../controllers/CommandInteractionController";
 import { SlashCommand } from "../structures/SlashCommand";
 import { discord } from "../util/constraints";
 import registerCommand from "../util/registerCommand";
