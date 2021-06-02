@@ -20,6 +20,17 @@ export const replacebutton = new ButtonComponent({
     style: 4,
     label: "I will replace all other buttons"
 })
+
+export const hibutton = new ButtonComponent({
+    style: 1,
+    label: "Hi"
+})
+
+export const byebutton = new ButtonComponent({
+    style: 1,
+    label: "Bye"
+})
+
 export const killerbutton = new ButtonComponent({ style: 4, label: 'I replaced the others' });
 export const reviverbutton = new ButtonComponent({ style: 3, label: 'Bring them back!' });
 export const selectionbutton = new ButtonComponent({

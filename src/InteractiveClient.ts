@@ -64,15 +64,13 @@ export class InteractiveClient extends TypedEmitter<Events> {
     this._selectionListeners.set(selection.customId, callback);
   }
 
-  sendComponents({channel, components, content, embed}: SendComponentsOptions) {
+  sendComponents({ channel, components, content, embed }: SendComponentsOptions) {
 
     const cluster = compileComponents(components);
-    
-    console.log(cluster)
 
     let senderOpts: APIMessageContentResolvable | MessageAdditions | MessageOptions = {
       content,
-      components: cluster.compile(true) as string,
+      components: cluster.compile() as string,
     }
 
     if (embed) senderOpts.embed = embed;
@@ -92,7 +90,7 @@ export class InteractiveClient extends TypedEmitter<Events> {
 
         })
         newTextChannel.send(senderOpts);
-      break;
+        break;
 
       case "news":
         const newNewsChannel = new NewsChannel(channel.guild, {
@@ -107,7 +105,7 @@ export class InteractiveClient extends TypedEmitter<Events> {
           id: channel.id
         });
         newNewsChannel.send(senderOpts)
-      break;
+        break;
 
       case "dm":
         const newDmChannel = new DMChannel(this.bot, {
@@ -117,7 +115,7 @@ export class InteractiveClient extends TypedEmitter<Events> {
           id: channel.id
         })
         newDmChannel.send(senderOpts);
-      break;
+        break;
 
     }
 
