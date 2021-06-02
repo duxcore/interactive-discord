@@ -13,6 +13,7 @@ export interface RawInteractionObject {
   channel_id: string;
   application_id: string;
 }
+
 export interface Message {
   type: number;
   tts: boolean;

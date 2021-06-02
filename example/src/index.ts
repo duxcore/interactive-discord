@@ -141,4 +141,22 @@ bot.on('message', (message) => {
     }
 })
 
+interactiveClient.on("buttonInteraction", (interaction) => {
+    if (!interaction.isHandled) {
+        interaction.respond({ isPrivate: true, content: 'This interaction is over' })
+    }
+})
+
+interactiveClient.on("selectionInteraction", (interaction) => {
+    if (!interaction.isHandled) {
+        interaction.respond({ isPrivate: true, content: 'This interaction is over' })
+    }
+})
+
+interactiveClient.on("commandInteraction", (interaction) => {
+    if (!interaction.isHandled) {
+        interaction.respond({ isPrivate: true, content: 'This interaction is over' })
+    }
+})
+
 bot.login(process.env.TOKEN);

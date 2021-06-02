@@ -15,6 +15,7 @@ export class InteractionControllerBase {
 
   private _id: string;
   private _guildId: string;
+  private _isHandled: boolean;
 
   constructor(raw: RawInteractionObject, client: InteractiveClient) {
     this._raw = raw;
@@ -26,6 +27,7 @@ export class InteractionControllerBase {
 
     this._id = raw.id;
     this._guildId = raw.guild_id;
+    this._isHandled = raw.is_handled;
   }
 
   get raw(): RawInteractionObject { return this._raw; }
@@ -48,6 +50,13 @@ export class InteractionControllerBase {
   get message(): Message | null {
     const message = this._raw.message;
     return message ?? null;
+  }
+
+  get isHandled(): boolean { return this._isHandled }
+
+  setisHandled(is_handled: boolean): this {
+    this._isHandled = is_handled
+    return this;
   }
 
   respond(response: InteractionResponseOptions): Promise<void> {
