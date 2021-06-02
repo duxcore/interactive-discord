@@ -1,6 +1,6 @@
 import Discord, { MessageEmbed } from 'discord.js';
 import { config } from 'dotenv';
-import InteractiveClient, { ComponentActionRow, ComponentCluster } from '@duxcore/interactive-discord';
+import InteractiveClient, { ComponentActionRow, ComponentCluster, SlashCommand } from '@duxcore/interactive-discord';
 import { dangerbutton, killerbutton, linkbutton, primarybutton, replacebutton, reviverbutton, secondarybutton, selectionbutton, successbutton, basicselection, multiselection, multiselectbutton, hibutton, byebutton } from './constants';
 
 config();
@@ -11,6 +11,9 @@ const interactiveClient = new InteractiveClient(bot)
 
 bot.once('ready', () => {
     console.log('Bot online')
+
+    const test = new SlashCommand({ name: 'test', description: 'test command', guilds: ['844279877503025182'] })
+    interactiveClient.commands.register(test)
 })
 
 bot.on('message', (message) => {

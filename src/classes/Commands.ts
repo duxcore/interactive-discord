@@ -11,10 +11,10 @@ export class Commands {
   private _client: InteractiveClient;
   private _commandCache = new Collection<string, CommandController>();
   private _axiosOpts: any;
-  
+
   constructor(client: InteractiveClient) {
     this._client = client;
-    this._axiosOpts = {headers: { "Authorization": `Bot ${this._client.bot.token}`}};
+    this._axiosOpts = { headers: { "Authorization": `Bot ${this._client.bot.token}` } };
   }
 
   public async getAll(guild?: Snowflake): Promise<Collection<Snowflake, ApplicationCommand>> {
@@ -38,12 +38,12 @@ export class Commands {
     return;
   }
 
-  public async register(cmd: SlashCommand): Promise<CommandController> {
-    let cachedCmd = this._commandCache.get(cmd.name);
-    if (cachedCmd) return (await cachedCmd.update(cmd));
+  public async register(command: SlashCommand): Promise<CommandController> {
+    let cachedCmd = this._commandCache.get(command.name);
+    if (cachedCmd) return (await cachedCmd.update(command));
 
-    const registeredData = await registerCommand(cmd, this._client);
-    const controller = new CommandController(cmd, registeredData, this._client);
+    const registeredData = await registerCommand(command, this._client);
+    const controller = new CommandController(command, registeredData, this._client);
 
     this._commandCache.set(controller.command.name, controller);
     return controller;

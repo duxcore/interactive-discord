@@ -1,5 +1,5 @@
 import { Snowflake } from "discord.js";
-import { ApplicationCommandOption, ApplicationCommandPermissions, NewCommandOptions } from "../util/types/command";
+import { ApplicationCommandOption, ApplicationCommandPermissions, SlashCommandOptions } from "../util/types/command";
 
 export class SlashCommand {
   private _name: string;
@@ -10,7 +10,7 @@ export class SlashCommand {
   private _options: ApplicationCommandOption[];
   private _defaultPermission: boolean;
 
-  constructor(options: NewCommandOptions) {
+  constructor(options: SlashCommandOptions) {
     this._name = options.name;
     this._description = options.description;
 
@@ -25,11 +25,11 @@ export class SlashCommand {
 
   get guilds(): Snowflake | Snowflake[] | null { return this._guilds; }
   get permissions(): ApplicationCommandPermissions[] { return this._permissions; }
-  get options(): ApplicationCommandOption[] { return this._options;}
+  get options(): ApplicationCommandOption[] { return this._options; }
   get defaultPermission(): boolean { return this._defaultPermission; }
 
-  compile(): NewCommandOptions {
-    const cmd: NewCommandOptions = {
+  compile(): SlashCommandOptions {
+    const cmd: SlashCommandOptions = {
       name: this._name,
       description: this._description,
 

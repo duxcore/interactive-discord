@@ -9,7 +9,7 @@ export enum ApplicationCommandOptionType {
   USER = 6,
   CHANNEL = 7,
   ROLE = 8,
-  MENTIONABLE = 9 
+  MENTIONABLE = 9
 }
 
 export enum ApplicationCommandPermissionType {
@@ -17,7 +17,7 @@ export enum ApplicationCommandPermissionType {
   USER = 2
 }
 
-export interface NewCommandOptions {
+export interface SlashCommandOptions {
   name: string;
   description: string;
   guilds?: Snowflake | Snowflake[];

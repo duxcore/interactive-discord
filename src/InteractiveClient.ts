@@ -8,7 +8,7 @@ import { ButtonComponent } from "./structures/buttons/ButtonComponent";
 import { getChannelPerms } from "./util/channel";
 import compileComponents from "./util/compileComponents";
 import { ButtonListenerCallback } from "./util/types/button";
-import { SendComponentsOptions, UniversalComponentType } from "./util/types/components";
+import { SendComponentsOptions } from "./util/types/components";
 import { Events } from "./util/types/events";
 import { InteractionType, RawInteractionObject } from "./util/types/interactions";
 import { SelectionListenerCallback } from "./util/types/selection";
@@ -63,6 +63,9 @@ export class InteractiveClient extends TypedEmitter<Events> {
 
           this.emit("buttonInteraction", btnController);
         }
+      }
+      if (interaction.type == InteractionType.ApplicationCommand) {
+        console.log(interaction);
       }
     })
   }

@@ -71,10 +71,10 @@ export interface User {
 }
 export interface Data {
   options?: (OptionsEntity)[] | null;
-  name: string;
+  name?: string;
   id: string;
-  custom_id: string;
-  component_type: number;
+  custom_id?: string;
+  component_type?: number;
   values?: string[] | null
 }
 export interface OptionsEntity {
