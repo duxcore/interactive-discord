@@ -1,26 +1,32 @@
-import { Client, Collection, DMChannel, NewsChannel, TextChannel } from "discord.js";
+import { APIMessageContentResolvable, Client, Collection, DMChannel, MessageAdditions, MessageOptions, NewsChannel, TextChannel } from "discord.js";
 import { TypedEmitter } from 'tiny-typed-emitter';
 import { SelectionComponent } from ".";
+import { Commands } from "./classes/Commands";
 import { ButtonInteractionController } from "./controllers/ButtonInteractionController";
 import { SelectionInteractionController } from "./controllers/SelectionInteractionController";
 import { ButtonComponent } from "./structures/buttons/ButtonComponent";
 import { getChannelPerms } from "./util/channel";
+import compileComponents from "./util/compileComponents";
 import { ButtonListenerCallback } from "./util/types/button";
-import { UniversalComponentType } from "./util/types/components";
+import { SendComponentsOptions, UniversalComponentType } from "./util/types/components";
 import { Events } from "./util/types/events";
 import { InteractionType, RawInteractionObject } from "./util/types/interactions";
 import { SelectionListenerCallback } from "./util/types/selection";
 
 export class InteractiveClient extends TypedEmitter<Events> {
   public bot: Client;
-  public applicationId: string;
 
   private _buttonListeners = new Collection<string, ButtonListenerCallback>();
   private _singleButtonListeners = new Collection<string, ButtonListenerCallback>();
   private _selectionListeners = new Collection<string, SelectionListenerCallback>();
 
-  constructor(bot: Client, applicationId: string) {
+  public commands: Commands;
+
+  constructor(bot: Client) {
     super();
+
+    this.bot = bot;
+    this.commands = new Commands(this);
 
     // @ts-ignore
     bot.ws.on("INTERACTION_CREATE", (interaction: RawInteractionObject) => {
@@ -44,9 +50,6 @@ export class InteractiveClient extends TypedEmitter<Events> {
         });
       }
     })
-
-    this.bot = bot;
-    this.applicationId = applicationId;
   }
 
   addButtonListener(button: ButtonComponent, callback: ButtonListenerCallback) {
@@ -61,7 +64,18 @@ export class InteractiveClient extends TypedEmitter<Events> {
     this._selectionListeners.set(selection.customId, callback);
   }
 
-  sendComponents(content: string, compiledComponents: string, channel: TextChannel | DMChannel | NewsChannel) {
+  sendComponents({channel, components, content, embed}: SendComponentsOptions) {
+
+    const cluster = compileComponents(components);
+    
+    console.log(cluster)
+
+    let senderOpts: APIMessageContentResolvable | MessageAdditions | MessageOptions = {
+      content,
+      components: cluster.compile(true) as string,
+    }
+
+    if (embed) senderOpts.embed = embed;
 
     switch (channel.type) {
       case "text":
@@ -77,11 +91,8 @@ export class InteractiveClient extends TypedEmitter<Events> {
           id: channel.id
 
         })
-        newTextChannel.send({
-          content,
-          components: compiledComponents
-        })
-        break;
+        newTextChannel.send(senderOpts);
+      break;
 
       case "news":
         const newNewsChannel = new NewsChannel(channel.guild, {
@@ -94,13 +105,9 @@ export class InteractiveClient extends TypedEmitter<Events> {
           name: channel.name,
           last_message_id: channel.lastMessageID,
           id: channel.id
-
-        })
-        newNewsChannel.send({
-          content,
-          components: compiledComponents
-        })
-        break;
+        });
+        newNewsChannel.send(senderOpts)
+      break;
 
       case "dm":
         const newDmChannel = new DMChannel(this.bot, {
@@ -109,11 +116,8 @@ export class InteractiveClient extends TypedEmitter<Events> {
           last_message_id: channel.lastMessageID,
           id: channel.id
         })
-        newDmChannel.send({
-          content,
-          components: compiledComponents
-        })
-        break;
+        newDmChannel.send(senderOpts);
+      break;
 
     }
 
