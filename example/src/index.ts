@@ -1,7 +1,7 @@
-import Discord, { DMChannel, TextChannel } from 'discord.js';
+import Discord, { DMChannel, MessageEmbed, TextChannel } from 'discord.js';
 import { config } from 'dotenv';
-import InteractiveClient, { ButtonComponent, ComponentCluster, LinkButtonComponent } from '@duxcore/interactive-discord';
-import { dangerbutton, killerbutton, linkbutton, primarybutton, replacebutton, reviverbutton, secondarybutton, selectionbutton, successbutton, basicselection, multiselection, multiselectbutton } from './constants';
+import InteractiveClient, { ButtonComponent, ComponentActionRow, ComponentCluster, LinkButtonComponent } from '@duxcore/interactive-discord';
+import { dangerbutton, killerbutton, linkbutton, primarybutton, replacebutton, reviverbutton, secondarybutton, selectionbutton, successbutton, basicselection, multiselection, multiselectbutton, hibutton, byebutton } from './constants';
 import { ComponentObject } from '@duxcore/interactive-discord/lib/util/types/components';
 
 config();
@@ -112,6 +112,36 @@ bot.on('message', (message) => {
             interactiveClient.addSelectionListener(multiselection, (interaction) => {
                 interaction.respond({ content: `Selected: ${interaction.selections?.join(",")}`, isPrivate: true })
             })
+
+            break
+
+        case "!embeds":
+
+            const embed = new MessageEmbed();
+            embed.setTitle('Interactive embed?')
+            embed.setDescription('Try clicking one of the buttons below')
+
+            const embedbuttonRow = new ComponentActionRow(hibutton, byebutton)
+
+            interactiveClient.sendComponents({
+                channel: message.channel,
+                components: embedbuttonRow,
+                content: 'Embed',
+                embed: embed
+            })
+
+            interactiveClient.addButtonListener(hibutton, (interaction) => {
+                embed.setDescription('Hi button clicked')
+                interaction.respond({ shouldEdit: true, embeds: [embed] })
+
+            })
+
+            interactiveClient.addButtonListener(byebutton, (interaction) => {
+                embed.setDescription('Bye button clicked')
+                interaction.respond({ shouldEdit: true, embeds: [embed] })
+            })
+
+
 
             break
     }
