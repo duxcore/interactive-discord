@@ -31,32 +31,38 @@ export class InteractiveClient extends TypedEmitter<Events> {
     // @ts-ignore
     bot.ws.on("INTERACTION_CREATE", (interaction: RawInteractionObject) => {
       if (interaction.type == InteractionType.MessageComponent) {
-        const btnController = new ButtonInteractionController(interaction, this)
-        const selController = new SelectionInteractionController(interaction, this)
-        btnController.setisHandled(false);
-        selController.setisHandled(false);
-        this.emit("buttonInteraction", btnController);
-        this._buttonListeners.map((cb, key) => {
-          if (btnController.customId == key) {
-            btnController.setisHandled(true);
-            return cb(btnController)
-          };
-        });
 
-        this._singleButtonListeners.map((cb, key) => {
-          if (btnController.customId == key) {
-            btnController.setisHandled(true);
-            this._singleButtonListeners.delete(key);
-            return cb(btnController);
-          }
-        });
+        if (interaction.data.values) {
+          const selController = new SelectionInteractionController(interaction, this)
 
-        this._selectionListeners.map((cs, key) => {
-          if (selController.customId == key) {
-            selController.setisHandled(true);
-            return cs(selController)
-          };
-        });
+          this._selectionListeners.map((cs, key) => {
+            if (selController.customId == key) {
+              selController.setisHandled(true);
+              return cs(selController)
+            };
+          });
+
+          this.emit("selectionInteraction", selController);
+        } else {
+          const btnController = new ButtonInteractionController(interaction, this)
+
+          this._buttonListeners.map((cb, key) => {
+            if (btnController.customId == key) {
+              btnController.setisHandled(true);
+              return cb(btnController)
+            };
+          });
+
+          this._singleButtonListeners.map((cb, key) => {
+            if (btnController.customId == key) {
+              btnController.setisHandled(true);
+              this._singleButtonListeners.delete(key);
+              return cb(btnController);
+            }
+          });
+
+          this.emit("buttonInteraction", btnController);
+        }
       }
     })
   }
