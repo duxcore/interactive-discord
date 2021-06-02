@@ -11,6 +11,10 @@ export class ComponentCluster {
     components.map(comp => this.components.push(comp));
   }
 
+  addComponent(...components: ComponentTypes[]) {
+    components.map(comp => this.components.push(comp));
+  }
+
   compile(asString?: boolean): ComponentObject[] | string {
     let components: ComponentObject[] = [];
 
