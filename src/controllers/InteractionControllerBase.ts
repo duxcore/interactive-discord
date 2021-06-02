@@ -27,7 +27,7 @@ export class InteractionControllerBase {
 
     this._id = raw.id;
     this._guildId = raw.guild_id;
-    this._isHandled = raw.is_handled;
+    this._isHandled = false;
   }
 
   get raw(): RawInteractionObject { return this._raw; }
