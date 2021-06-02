@@ -1,26 +1,23 @@
-import Discord, { DMChannel, MessageEmbed, TextChannel } from 'discord.js';
+import Discord, { MessageEmbed } from 'discord.js';
 import { config } from 'dotenv';
-import InteractiveClient, { ButtonComponent, ComponentActionRow, ComponentCluster, LinkButtonComponent } from '@duxcore/interactive-discord';
+import InteractiveClient, { ComponentActionRow, ComponentCluster } from '@duxcore/interactive-discord';
 import { dangerbutton, killerbutton, linkbutton, primarybutton, replacebutton, reviverbutton, secondarybutton, selectionbutton, successbutton, basicselection, multiselection, multiselectbutton, hibutton, byebutton } from './constants';
-import { ComponentObject } from '@duxcore/interactive-discord/lib/util/types/components';
 
 config();
+
 const bot = new Discord.Client();
 
 const interactiveClient = new InteractiveClient(bot)
-
-
 
 bot.once('ready', () => {
     console.log('Bot online')
 })
 
-
-
 bot.on('message', (message) => {
     if (message.author.bot) return;
     switch (message.content) {
         case "!buttons":
+
             const buttonCluster = new ComponentCluster(primarybutton, secondarybutton, successbutton, dangerbutton, linkbutton)
 
             interactiveClient.sendComponents({
@@ -41,6 +38,7 @@ bot.on('message', (message) => {
             interactiveClient.addButtonListener(dangerbutton, (interaction) => {
                 interaction.respond({ content: 'Danger Button Clicked', isPrivate: true })
             })
+
             break;
 
         case "!editable-buttons":
@@ -91,8 +89,6 @@ bot.on('message', (message) => {
                 interaction.respond({ content: `Selected: ${interaction.selections?.join(",")}`, isPrivate: true })
             })
 
-
-
             break
 
         case "!multi-select":
@@ -141,11 +137,8 @@ bot.on('message', (message) => {
                 interaction.respond({ shouldEdit: true, embeds: [embed] })
             })
 
-
-
             break
     }
 })
-
 
 bot.login(process.env.TOKEN);
