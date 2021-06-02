@@ -20,7 +20,7 @@ export class Commands {
 
   public async getAll(guild?: Snowflake): Promise<Collection<Snowflake, ApplicationCommand>> {
     const application = await this._client.bot.fetchApplication()
-    const url = (!guild ? `${discord.api_url}/applications/${application.id}/commands` : `${discord}/applications/${application.id}/guild/${guild}/commands`);
+    const url = (!guild ? `${discord.api_url}/applications/${application.id}/commands` : `${discord.api_url}/applications/${application.id}/guild/${guild}/commands`);
 
     const newDat: ApplicationCommand[] = await axios.get(url, this._axiosOpts).then(dat => dat.data);
     const collection = new Collection<Snowflake, ApplicationCommand>();
@@ -32,7 +32,7 @@ export class Commands {
 
   public async delete(id: Snowflake, guild?: Snowflake): Promise<void> {
     const application = await this._client.bot.fetchApplication()
-    const url = (!guild ? `${discord.api_url}/applications/${application.id}/commands/${id}` : `${discord}/applications/${application.id}/guild/${guild}/commands/${id}`);
+    const url = (!guild ? `${discord.api_url}/applications/${application.id}/commands/${id}` : `${discord.api_url}/applications/${application.id}/guild/${guild}/commands/${id}`);
 
     await axios.delete(url, this._axiosOpts);
 
