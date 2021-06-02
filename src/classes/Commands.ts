@@ -9,20 +9,19 @@ import { ApplicationCommand } from "../util/types/command";
 
 export class Commands {
   private _client: InteractiveClient;
-  private _axiosOpts: any;
   
   public cache = new Collection<string, CommandController>();
   
   constructor(client: InteractiveClient) {
     this._client = client;
-    this._axiosOpts = { headers: { "Authorization": `Bot ${this._client.bot.token}` } };
   }
 
   public async getAll(guild?: Snowflake): Promise<Collection<Snowflake, ApplicationCommand>> {
+    const opts = { headers: { "Authorization": `Bot ${this._client.bot.token}` } };
     const application = await this._client.bot.fetchApplication()
     const url = (!guild ? `${discord.api_url}/applications/${application.id}/commands` : `${discord.api_url}/applications/${application.id}/guilds/${guild}/commands`);
 
-    const newDat: ApplicationCommand[] = await axios.get(url, this._axiosOpts).then(dat => dat.data);
+    const newDat: ApplicationCommand[] = await axios.get(url, opts).then(dat => dat.data);
     const collection = new Collection<Snowflake, ApplicationCommand>();
 
     newDat.map(cmd => collection.set(cmd.id, cmd));
@@ -31,10 +30,11 @@ export class Commands {
   }
 
   public async delete(id: Snowflake, guild?: Snowflake): Promise<void> {
+    const opts = { headers: { "Authorization": `Bot ${this._client.bot.token}` } };
     const application = await this._client.bot.fetchApplication()
     const url = (!guild ? `${discord.api_url}/applications/${application.id}/commands/${id}` : `${discord.api_url}/applications/${application.id}/guilds/${guild}/commands/${id}`);
 
-    await axios.delete(url, this._axiosOpts);
+    await axios.delete(url, opts);
 
     return;
   }
