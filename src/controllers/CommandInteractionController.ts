@@ -4,7 +4,7 @@ import { SlashCommand } from "../structures/SlashCommand";
 import registerCommand from "../util/registerCommand";
 import { ApplicationCommand } from "../util/types/command";
 
-export class CommandController {
+export class CommandInteractionController {
   private _command: SlashCommand;
   private _client: InteractiveClient;
   private _commandDat: ApplicationCommand;

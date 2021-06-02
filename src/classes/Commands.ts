@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Collection, Snowflake } from "discord.js";
 import InteractiveClient from "..";
-import { CommandController } from "../controllers/CommandInteractionController";
+import { CommandInteractionController } from "../controllers/CommandInteractionController";
 import { SlashCommand } from "../structures/SlashCommand";
 import { discord } from "../util/constraints";
 import registerCommand from "../util/registerCommand";
@@ -9,7 +9,7 @@ import { ApplicationCommand } from "../util/types/command";
 
 export class Commands {
   private _client: InteractiveClient;
-  private _commandCache = new Collection<string, CommandController>();
+  private _commandCache = new Collection<string, CommandInteractionController>();
   private _axiosOpts: any;
 
   constructor(client: InteractiveClient) {
@@ -38,12 +38,12 @@ export class Commands {
     return;
   }
 
-  public async register(command: SlashCommand): Promise<CommandController> {
+  public async register(command: SlashCommand): Promise<CommandInteractionController> {
     let cachedCmd = this._commandCache.get(command.name);
     if (cachedCmd) return (await cachedCmd.update(command));
 
     const registeredData = await registerCommand(command, this._client);
-    const controller = new CommandController(command, registeredData, this._client);
+    const controller = new CommandInteractionController(command, registeredData, this._client);
 
     this._commandCache.set(controller.command.name, controller);
     return controller;
