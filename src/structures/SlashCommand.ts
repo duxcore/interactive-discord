@@ -5,7 +5,7 @@ export class SlashCommand {
   private _name: string;
   private _description: string;
 
-  private _permissions: ApplicationCommandPermissions[];
+  private _permissions?: ApplicationCommandPermissions[];
   private _options: ApplicationCommandOption[];
   private _defaultPermission: boolean;
 
@@ -13,7 +13,7 @@ export class SlashCommand {
     this._name = options.name;
     this._description = options.description;
 
-    this._permissions = options.permissions ?? [];
+    this._permissions = options.permissions ?? undefined;
     this._options = options.options ?? [];
     this._defaultPermission = options.default_permissions ?? true;
   }
@@ -21,7 +21,7 @@ export class SlashCommand {
   get name(): string { return this._name; }
   get description(): string { return this._description; }
 
-  get permissions(): ApplicationCommandPermissions[] { return this._permissions; }
+  get permissions(): ApplicationCommandPermissions[] { return this._permissions ?? []; }
   get options(): ApplicationCommandOption[] { return this._options; }
   get defaultPermission(): boolean { return this._defaultPermission; }
 
