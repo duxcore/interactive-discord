@@ -1,7 +1,7 @@
 import Discord, { MessageEmbed } from 'discord.js';
 import { config } from 'dotenv';
 import InteractiveClient, { ComponentActionRow, ComponentCluster, SlashCommand } from '@duxcore/interactive-discord';
-import { dangerbutton, killerbutton, linkbutton, primarybutton, replacebutton, reviverbutton, secondarybutton, selectionbutton, successbutton, basicselection, multiselection, multiselectbutton, hibutton, byebutton } from './constants';
+import { dangerbutton, killerbutton, linkbutton, primarybutton, replacebutton, reviverbutton, secondarybutton, selectionbutton, successbutton, basicselection, multiselection, multiselectbutton, hibutton, byebutton, happyemojibutton, sademojibutton } from './constants';
 
 config();
 
@@ -9,23 +9,30 @@ const bot = new Discord.Client();
 
 const interactiveClient = new InteractiveClient(bot)
 
+const myGuildId = '844279877503025182';
+
+
 bot.once('ready', () => {
     console.log('Bot online')
 
-    const buttons = new SlashCommand({ name: 'buttons', description: 'Sends various button components', guilds: ['844279877503025182'] })
+
+    const buttons = new SlashCommand({ name: 'buttons', description: 'Sends various button components', guilds: myGuildId })
     interactiveClient.commands.register(buttons)
 
-    const editableButtons = new SlashCommand({ name: 'editable-buttons', description: 'Sends various button components that edit the orignal message', guilds: ['844279877503025182'] })
+    const editableButtons = new SlashCommand({ name: 'editable-buttons', description: 'Sends various button components that edit the orignal message', guilds: myGuildId })
     interactiveClient.commands.register(editableButtons)
 
-    const selection = new SlashCommand({ name: 'selection', description: 'Sends basic selection component', guilds: ['844279877503025182'] })
+    const selection = new SlashCommand({ name: 'selection', description: 'Sends basic selection component', guilds: myGuildId })
     interactiveClient.commands.register(selection)
 
-    const multiSelect = new SlashCommand({ name: 'multi-select', description: 'Sends multi select component', guilds: ['844279877503025182'] })
+    const multiSelect = new SlashCommand({ name: 'multi-select', description: 'Sends multi select component', guilds: myGuildId })
     interactiveClient.commands.register(multiSelect)
 
-    const embed = new SlashCommand({ name: 'embed', description: 'Sends embed with button components', guilds: ['844279877503025182'] })
+    const embed = new SlashCommand({ name: 'embed', description: 'Sends embed with button components', guilds: myGuildId })
     interactiveClient.commands.register(embed)
+
+    const emoji = new SlashCommand({ name: 'emoji', description: 'Sends button components with emoji content', guilds: myGuildId })
+    interactiveClient.commands.register(emoji)
 })
 
 interactiveClient.on("commandInteraction", (interaction) => {
@@ -147,6 +154,29 @@ interactiveClient.on("commandInteraction", (interaction) => {
                 })
 
                 break
+
+            case "emoji":
+                const emotionbuttonRow = new ComponentActionRow(happyemojibutton, sademojibutton)
+
+                interaction.respond({
+                    components: emotionbuttonRow,
+                    content: 'Hello!'
+                })
+
+                interactiveClient.addButtonListener(happyemojibutton, (interaction) => {
+                    interaction.respond({
+                        content: `You made me <:ultrahappyduxcore:845821651240484864>`,
+                        shouldEdit: true
+                    })
+                })
+
+                interactiveClient.addButtonListener(sademojibutton, (interaction) => {
+                    interaction.respond({
+                        content: `You made me <:ultrasadduxcore:845821663395446794>`,
+                        shouldEdit: true
+                    })
+                })
+                break;
         }
     }
 })
