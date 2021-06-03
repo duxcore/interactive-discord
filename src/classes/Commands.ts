@@ -1,23 +1,25 @@
 import axios from "axios";
-import { Collection, Snowflake } from "discord.js";
 import InteractiveClient from "..";
-import { CommandController } from "../controllers/CommandController";
-import { SlashCommand } from "../structures/SlashCommand";
 import { discord } from "../util/constraints";
-import registerCommand from "../util/registerCommand";``
-import { ApplicationCommand } from "../util/types/command";
 import updateCommand from "../util/updateCommand";
+import { Collection, Snowflake } from "discord.js";
+import registerCommand from "../util/registerCommand";``
+import { SlashCommand } from "../structures/SlashCommand";
+import { ApplicationCommand } from "../util/types/command";
+import { testCommandUnchanged } from "../util/testCommandUnchanged";
+
+type CommandCollection = Collection<Snowflake, ApplicationCommand>;
+type Guilds = Snowflake | Snowflake[]
 
 export class Commands {
   private _client: InteractiveClient;
-  
-  public cache = new Collection<string, CommandController>();
+  private _internalCommandCache = new Collection<Snowflake | "global", CommandCollection>()
   
   constructor(client: InteractiveClient) {
     this._client = client;
   }
 
-  public async getAll(guild?: Snowflake): Promise<Collection<Snowflake, ApplicationCommand>> {
+  public async getAll(guild?: Snowflake): Promise<CommandCollection> {
     const opts = { headers: { "Authorization": `Bot ${this._client.bot.token}` } };
     const application = await this._client.bot.fetchApplication()
     const url = (!guild ? `${discord.api_url}/applications/${application.id}/commands` : `${discord.api_url}/applications/${application.id}/guilds/${guild}/commands`);
@@ -30,35 +32,119 @@ export class Commands {
     return collection;
   }
 
-  public async delete(id: Snowflake, guild?: Snowflake): Promise<void> {
+  public async delete(id: Snowflake, guilds?: Snowflake): Promise<void> {
     const opts = { headers: { "Authorization": `Bot ${this._client.bot.token}` } };
-    const application = await this._client.bot.fetchApplication()
-    const url = (!guild ? `${discord.api_url}/applications/${application.id}/commands/${id}` : `${discord.api_url}/applications/${application.id}/guilds/${guild}/commands/${id}`);
+    const application = await this._client.bot.fetchApplication();
 
-    await axios.delete(url, opts);
-
+    if (!guilds) {
+      const url = `${discord.api_url}/applications/${application.id}/commands/${id}`;
+      await axios.delete(url, opts);
+      return;
+    }
+    
+    const guildUrl = (gid: Snowflake) => `${discord.api_url}/applications/${application.id}/guilds/${gid}/commands/${id}`;
+    const gs = (typeof guilds == 'string' ? [ guilds ] : guilds);
+    gs.map(async gid => {
+      await axios.delete(guildUrl(gid), opts);
+      return;
+    });
     return;
   }
 
-  public async register(command: SlashCommand): Promise<CommandController> {
-    let cachedCmd = this.cache.get(command.name);
-    if (cachedCmd) return (await cachedCmd.update(command));
+  public async bulkDelete(ids: Snowflake[], guilds?: Snowflake): Promise<void> {
+    const opts = { headers: { "Authorization": `Bot ${this._client.bot.token}` } };
+    const application = await this._client.bot.fetchApplication();
+    ids.forEach(async id => {
+      if (!guilds) {
+        const url = `${discord.api_url}/applications/${application.id}/commands/${id}`;
+        await axios.delete(url, opts);
+        return;
+      }
+      
+      const guildUrl = (gid: Snowflake) => `${discord.api_url}/applications/${application.id}/guilds/${gid}/commands/${id}`;
+      const gs = (typeof guilds == 'string' ? [ guilds ] : guilds);
+      gs.map(async gid => {
+        await axios.delete(guildUrl(gid), opts);
+        return;
+      });
+      return;
+    });
 
-    const registeredData = await registerCommand(command, this._client);
-    const controller = new CommandController(command, registeredData, this._client);
-
-    this.cache.set(controller.command.name, controller);
-    return controller;
   }
 
-  public async patch(command: SlashCommand): Promise<CommandController> {
-    let cachedCmd = this.cache.get(command.name);
-    if (cachedCmd) return (await cachedCmd.update(command));
+  public async register(command: SlashCommand, guilds?: Guilds): Promise<void> {
+    if (!guilds && !this._internalCommandCache.has('global')) this._internalCommandCache.set('global', await this.getAll());
+    if (guilds !== undefined) {
+      const gs = (typeof guilds == 'string' ? [ guilds ] : guilds);
+      gs.map(async id => { if (!this._internalCommandCache.has(id)) return this._internalCommandCache.set(id, await this.getAll(id))})
+    }
 
-    const registeredData = await updateCommand(command, this._client);
-    const controller = new CommandController(command, registeredData, this._client);
+    if (!guilds) {
+      const global = this._internalCommandCache.get("global") as CommandCollection;
+      const getCommand = global.find(cmd => cmd.name == command.name);
 
-    this.cache.set(controller.command.name, controller);
-    return controller;
+      if (!getCommand) {
+        await registerCommand({command}, this._client);
+        return;
+      }
+        if (await testCommandUnchanged(command, getCommand)) return;
+        await updateCommand({command, commandId: getCommand.id}, this._client);
+      return;
+    } 
+    
+    const gs = (typeof guilds == 'string' ? [ guilds ] : guilds);
+    gs.map(async gid => {
+      const guild = this._internalCommandCache.get(gid) as CommandCollection;
+      const getCommand = guild.find(cmd => cmd.name == command.name);
+  
+      if (!getCommand) {
+        await registerCommand({command}, this._client);
+        return;
+      }
+      if (await testCommandUnchanged(command, getCommand)) return;
+      await updateCommand({command, commandId: getCommand.id}, this._client);
+      return;
+    });
+  }
+
+  public async bulkRegister(commands: SlashCommand[], guilds?: Guilds): Promise<void> {
+    if (!guilds && !this._internalCommandCache.has('global')) this._internalCommandCache.set('global', await this.getAll());
+    if (guilds !== undefined) {
+      const gs = (typeof guilds == 'string' ? [ guilds ] : guilds);
+      gs.map(async id => { if (!this._internalCommandCache.has(id)) return this._internalCommandCache.set(id, await this.getAll(id))})
+    }
+
+    if (!guilds) {
+      const global = this._internalCommandCache.get("global") as CommandCollection;
+      commands.map(async command => {
+        const getCommand = global.find(cmd => cmd.name == command.name);
+  
+        if (!getCommand) {
+          await registerCommand({command}, this._client);
+          return;
+        }
+        if (await testCommandUnchanged(command, getCommand)) return;
+        await updateCommand({command, commandId: getCommand.id}, this._client);
+        return;
+      });
+      return;
+    } 
+    
+    const gs = (typeof guilds == 'string' ? [ guilds ] : guilds);
+    gs.map(async gid => {
+      const guild = this._internalCommandCache.get(gid) as CommandCollection;
+      commands.map(async command => {
+        const getCommand = guild.find(cmd => cmd.name == command.name);
+    
+        if (!getCommand) {
+          await registerCommand({command}, this._client);
+          return;
+        }
+        if (await testCommandUnchanged(command, getCommand)) return;
+        await updateCommand({command, commandId: getCommand.id}, this._client);
+        return;
+      });
+    });
+    return;
   }
 }

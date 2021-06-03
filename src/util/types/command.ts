@@ -21,7 +21,6 @@ export enum ApplicationCommandPermissionType {
 export interface SlashCommandOptions {
   name: string;
   description: string;
-  guilds?: Snowflake | Snowflake[];
   permissions?: ApplicationCommandPermissions[];
   options?: ApplicationCommandOption[];
   default_permissions?: boolean;
