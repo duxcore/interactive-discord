@@ -4,8 +4,9 @@ import InteractiveClient from "..";
 import { CommandController } from "../controllers/CommandController";
 import { SlashCommand } from "../structures/SlashCommand";
 import { discord } from "../util/constraints";
-import registerCommand from "../util/registerCommand";
+import registerCommand from "../util/registerCommand";``
 import { ApplicationCommand } from "../util/types/command";
+import updateCommand from "../util/updateCommand";
 
 export class Commands {
   private _client: InteractiveClient;
@@ -44,6 +45,17 @@ export class Commands {
     if (cachedCmd) return (await cachedCmd.update(command));
 
     const registeredData = await registerCommand(command, this._client);
+    const controller = new CommandController(command, registeredData, this._client);
+
+    this.cache.set(controller.command.name, controller);
+    return controller;
+  }
+
+  public async patch(command: SlashCommand): Promise<CommandController> {
+    let cachedCmd = this.cache.get(command.name);
+    if (cachedCmd) return (await cachedCmd.update(command));
+
+    const registeredData = await updateCommand(command, this._client);
     const controller = new CommandController(command, registeredData, this._client);
 
     this.cache.set(controller.command.name, controller);

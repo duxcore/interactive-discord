@@ -1,8 +1,7 @@
-import axios from "axios";
 import InteractiveClient from "..";
 import { SlashCommand } from "../structures/SlashCommand";
-import registerCommand from "../util/registerCommand";
 import { ApplicationCommand } from "../util/types/command";
+import updateCommand from "../util/updateCommand";
 
 export class CommandController {
   private _command: SlashCommand;
@@ -21,7 +20,7 @@ export class CommandController {
 
   public async update(cmd: SlashCommand): Promise<this> {
     this._command = cmd;
-    this._commandDat = await registerCommand(cmd, this._client);
+    this._commandDat = await updateCommand(cmd, this._client);
     return this;
   }
 }
