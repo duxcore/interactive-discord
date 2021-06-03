@@ -52,7 +52,7 @@ export class InteractionResponse {
 
   compile(): InteractionResponseObject {
     let responseObject: InteractionResponseObject = {
-      type: this._edit ? InteractionResponseType.UpdateMessage : this._type,
+      type: this._edit ? InteractionResponseType.UpdateMessage : (this._type ?? 4),
       data: {
         content: this._content,
         tts: this._useTTS,
