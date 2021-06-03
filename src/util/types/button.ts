@@ -7,6 +7,8 @@ export interface ButtonComponentOptions {
   style?: ButtonStyle,
   custom_id?: string,
   disabled?: boolean
+  emoji?: EmojiPartial,
 }
+
 
 export type ButtonListenerCallback = (interaction: ButtonInteractionController) => void;

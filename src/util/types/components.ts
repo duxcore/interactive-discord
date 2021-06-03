@@ -30,9 +30,9 @@ export enum ButtonStyle {
 }
 
 export interface EmojiPartial {
-  name?: string,
-  id?: string,
-  animated?: boolean
+  name: string,
+  id: string,
+  animated: boolean
 }
 
 export interface ComponentObject {

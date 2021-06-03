@@ -4,9 +4,14 @@ import { ButtonStyle, ComponentObject, ComponentType, EmojiPartial } from "../..
 import { BaseButtonComponent } from './BaseButtonComponent';
 
 export class ButtonComponent extends BaseButtonComponent {
+  private _emoji?: EmojiPartial;
+
   constructor(options: ButtonComponentOptions) {
     super(options);
+    this._emoji = options.emoji ?? undefined;
   }
+
+  get emoji(): EmojiPartial | undefined { return this._emoji }
 
   compile(asString?: boolean): ComponentObject | string {
     const compiledObject: ComponentObject = {
@@ -15,6 +20,7 @@ export class ButtonComponent extends BaseButtonComponent {
       style: this.style,
       label: this.label,
       disabled: this.disabled,
+      emoji: this.emoji
     }
 
     if (!asString) return compiledObject;
