@@ -73,10 +73,7 @@ export class InteractionControllerBase {
         .then(dat => {
           resolve()
         })
-        .catch(dat => reject({
-          message: "An error has occured whilst trying to send a response...",
-          errors: dat.response.data.errors
-        }));
+        .catch(dat => reject(dat));
     })
   }
 }
