@@ -16,28 +16,28 @@ bot.once('ready', () => {
     console.log('Bot online')
 
 
-    const buttons = new SlashCommand({ name: 'buttons', description: 'Sends various button components', guilds: myGuildId })
+    const buttons = new SlashCommand({ name: 'buttons', description: 'Sends various button components' })
     interactiveClient.commands.register(buttons)
 
-    const editableButtons = new SlashCommand({ name: 'editable-buttons', description: 'Sends various button components that edit the orignal message', guilds: myGuildId })
+    const editableButtons = new SlashCommand({ name: 'editable-buttons', description: 'Sends various button components that edit the orignal message' })
     interactiveClient.commands.register(editableButtons)
 
-    const selection = new SlashCommand({ name: 'selection', description: 'Sends basic selection component', guilds: myGuildId })
+    const selection = new SlashCommand({ name: 'selection', description: 'Sends basic selection component' })
     interactiveClient.commands.register(selection)
 
-    const multiSelect = new SlashCommand({ name: 'multi-select', description: 'Sends multi select component', guilds: myGuildId })
+    const multiSelect = new SlashCommand({ name: 'multi-select', description: 'Sends multi select component' })
     interactiveClient.commands.register(multiSelect)
 
-    const embed = new SlashCommand({ name: 'embed', description: 'Sends embed with button components', guilds: myGuildId })
+    const embed = new SlashCommand({ name: 'embed', description: 'Sends embed with button components' })
     interactiveClient.commands.register(embed)
 
-    const emoji = new SlashCommand({ name: 'emoji', description: 'Sends button components with emoji content', guilds: myGuildId })
+    const emoji = new SlashCommand({ name: 'emoji', description: 'Sends button components with emoji content' })
     interactiveClient.commands.register(emoji)
 })
 
 interactiveClient.on("commandInteraction", (interaction) => {
     if (!interaction.isHandled) {
-        switch (interaction.command?.name) {
+        switch (interaction.raw.data.name) {
             case "buttons":
 
                 const buttonCluster = new ComponentCluster(primarybutton, secondarybutton, successbutton, dangerbutton, linkbutton)
