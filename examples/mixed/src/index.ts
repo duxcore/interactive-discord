@@ -17,22 +17,22 @@ bot.once('ready', () => {
 
 
     const buttons = new SlashCommand({ name: 'buttons', description: 'Sends various button components' })
-    interactiveClient.commands.register(buttons)
+    interactiveClient.commands.register(buttons, myGuildId)
 
     const editableButtons = new SlashCommand({ name: 'editable-buttons', description: 'Sends various button components that edit the orignal message' })
-    interactiveClient.commands.register(editableButtons)
+    interactiveClient.commands.register(editableButtons, myGuildId)
 
     const selection = new SlashCommand({ name: 'selection', description: 'Sends basic selection component' })
-    interactiveClient.commands.register(selection)
+    interactiveClient.commands.register(selection, myGuildId)
 
     const multiSelect = new SlashCommand({ name: 'multi-select', description: 'Sends multi select component' })
-    interactiveClient.commands.register(multiSelect)
+    interactiveClient.commands.register(multiSelect, myGuildId)
 
     const embed = new SlashCommand({ name: 'embed', description: 'Sends embed with button components' })
-    interactiveClient.commands.register(embed)
+    interactiveClient.commands.register(embed, myGuildId)
 
     const emoji = new SlashCommand({ name: 'emoji', description: 'Sends button components with emoji content' })
-    interactiveClient.commands.register(emoji)
+    interactiveClient.commands.register(emoji, myGuildId)
 })
 
 interactiveClient.on("commandInteraction", (interaction) => {
