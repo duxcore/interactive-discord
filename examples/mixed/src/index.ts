@@ -15,7 +15,6 @@ const myGuildId = '844279877503025182';
 bot.once('ready', () => {
     console.log('Bot online')
 
-
     const buttons = new SlashCommand({ name: 'buttons', description: 'Sends various button components' })
     interactiveClient.commands.register(buttons, myGuildId)
 
