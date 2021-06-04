@@ -14,8 +14,10 @@
   "dependencies": {
     "axios": "^0.21.1",
     "discord.js": "12.5.2",
+    "examples": "^0.1.0",
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
+    "src": "^1.1.2",
     "tiny-typed-emitter": "^2.0.3",
     "uuid": "^8.3.2"
   },

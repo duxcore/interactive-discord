@@ -31,6 +31,8 @@ export function testCommandUnchanged(command: SlashCommand, reference: Applicati
     (command.options.length == referenceOpts.length)
   ]
 
+  console.log(tests);
+
   if (tests.includes(false)) return false;
   else return true;
 }

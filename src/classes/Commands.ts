@@ -80,8 +80,8 @@ export class Commands {
     }
 
     if (!guilds) {
-      const global = this._internalCommandCache.get("global") as CommandCollection;
-      const getCommand = global.find(cmd => cmd.name == command.name);
+      const global = this._internalCommandCache.get("global");
+      const getCommand = global?.find(cmd => cmd.name == command.name) ?? null;
 
       if (!getCommand) {
         await registerCommand({command}, this._client);
@@ -94,15 +94,15 @@ export class Commands {
     
     const gs = (typeof guilds == 'string' ? [ guilds ] : guilds);
     gs.map(async gid => {
-      const guild = this._internalCommandCache.get(gid) as CommandCollection;
-      const getCommand = guild.find(cmd => cmd.name == command.name);
-  
+      const guild = this._internalCommandCache.get(gid);
+      const getCommand = guild?.find(cmd => cmd.name == command.name) ?? null;
+
       if (!getCommand) {
-        await registerCommand({command}, this._client);
+        await registerCommand({command, guilds: [ gid ]}, this._client);
         return;
       }
       if (await testCommandUnchanged(command, getCommand)) return;
-      await updateCommand({command, commandId: getCommand.id}, this._client);
+        await updateCommand({command, commandId: getCommand.id, guilds: [ gid ]}, this._client);
       return;
     });
   }
@@ -115,9 +115,9 @@ export class Commands {
     }
 
     if (!guilds) {
-      const global = this._internalCommandCache.get("global") as CommandCollection;
+      const global = this._internalCommandCache.get("global");
       commands.map(async command => {
-        const getCommand = global.find(cmd => cmd.name == command.name);
+        const getCommand = global?.find(cmd => cmd.name == command.name) ?? null;
   
         if (!getCommand) {
           await registerCommand({command}, this._client);
@@ -132,16 +132,16 @@ export class Commands {
     
     const gs = (typeof guilds == 'string' ? [ guilds ] : guilds);
     gs.map(async gid => {
-      const guild = this._internalCommandCache.get(gid) as CommandCollection;
+      const guild = this._internalCommandCache.get(gid);
       commands.map(async command => {
-        const getCommand = guild.find(cmd => cmd.name == command.name);
-    
+        const getCommand = guild?.find(cmd => cmd.name == command.name) ?? null;
+  
         if (!getCommand) {
-          await registerCommand({command}, this._client);
+          await registerCommand({command, guilds: [ gid ]}, this._client);
           return;
         }
         if (await testCommandUnchanged(command, getCommand)) return;
-        await updateCommand({command, commandId: getCommand.id}, this._client);
+          await updateCommand({command, commandId: getCommand.id, guilds: [ gid ]}, this._client);
         return;
       });
     });

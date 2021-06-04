@@ -1,0 +1,23 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "example",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "node build/index.js",
+    "dev": "ts-node src/index"
+  },
+  "author": "Jackson Roberts <jackson@holopanio.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@duxcore/interactive-discord": "file:../..",
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^15.6.1",
+    "ts-node": "^10.0.0"
+  }
+}
