@@ -1,10 +1,10 @@
 import { SlashCommand } from "../structures/SlashCommand";
-import { ApplicationCommand } from "./types/command";
+import { ApplicationCommand, ApplicationCommandOption } from "./types/command";
 
 // false - Command has been changed
 // true - command has not been changed.
 export function testCommandUnchanged(command: SlashCommand, reference: ApplicationCommand): boolean{
-  if (command.name !== reference.name) return false
+/*  if (command.name !== reference.name) return false
   if (command.description !== reference.description) return false
   if (command.options.length !== reference.options?.length) return false
   for (let i = 0; i < command.options.length; i++) {
@@ -22,7 +22,15 @@ export function testCommandUnchanged(command: SlashCommand, reference: Applicati
       if (choice.name !== refChoice.name) return false
       if (choice.value !== refChoice.value) return false
     }
-  }
+  } */
+  
+  const referenceOpts = (reference.options ?? []);
+  const tests = [
+    (command.name == reference.name),
+    (command.description == reference.description),
+    (command.options.length == referenceOpts.length)
+  ]
 
-  return true
+  if (tests.includes(false)) return false;
+  else return true;
 }
