@@ -67,10 +67,18 @@ index 36c26f2..61c715b 100644
    }
  
 diff --git a/node_modules/discord.js/typings/index.d.ts b/node_modules/discord.js/typings/index.d.ts
-index e0be3c6..747416b 100644
+index e0be3c6..046befd 100644
 --- a/node_modules/discord.js/typings/index.d.ts
 +++ b/node_modules/discord.js/typings/index.d.ts
-@@ -2839,6 +2839,7 @@ declare module 'discord.js' {
+@@ -2832,13 +2832,14 @@ declare module 'discord.js' {
+     tts?: boolean;
+     nonce?: string;
+     content?: StringResolvable;
+-    embed?: MessageEmbed | MessageEmbedOptions;
++    embeds?: MessageEmbed[] | MessageEmbedOptions[];
+     disableMentions?: 'none' | 'all' | 'everyone';
+     allowedMentions?: MessageMentionOptions;
+     files?: (FileOptions | BufferResolvable | Stream | MessageAttachment)[];
      code?: string | boolean;
      split?: boolean | SplitOptions;
      reply?: UserResolvable;
