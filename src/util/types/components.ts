@@ -61,7 +61,7 @@ export type UniversalComponentType =
 
 export interface SendComponentsOptions {
   content: string;
-  embed?: MessageEmbed;
+  embeds?: MessageEmbed[];
   components: UniversalComponentType;
   channel: TextChannel | DMChannel | NewsChannel
 }

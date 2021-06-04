@@ -96,7 +96,7 @@ export class InteractiveClient extends TypedEmitter<Events> {
     this._commandListeners.set(cmd.name, callback);
   }
 
-  sendComponents({ channel, components, content, embed }: SendComponentsOptions) {
+  sendComponents({ channel, components, content, embeds }: SendComponentsOptions) {
 
     const cluster = compileComponents(components);
 
@@ -105,7 +105,7 @@ export class InteractiveClient extends TypedEmitter<Events> {
       components: cluster.compile() as string,
     }
 
-    if (embed) senderOpts.embed = embed;
+    if (embeds) senderOpts.embeds = embeds;
 
     switch (channel.type) {
       case "text":

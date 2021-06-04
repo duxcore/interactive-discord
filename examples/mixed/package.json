@@ -11,7 +11,7 @@
   "author": "Amitoj Singh <amitojsingh366@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@duxcore/interactive-discord": "file:..",
+    "@duxcore/interactive-discord": "file:../..",
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0"
   },
