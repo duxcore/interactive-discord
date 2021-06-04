@@ -2,7 +2,7 @@
   "name": "@duxcore/interactive-discord",
   "author": "Jackson Roberts <jackson@holopanio.com>",
   "description": "A package that will allow you to seamlessly integrate discord interactions into your bot.",
-  "version": "1.3.7",
+  "version": "1.3.8",
   "license": "GPL-3.0",
   "main": "lib/index",
   "private": false,
@@ -25,5 +25,16 @@
     "@types/uuid": "^8.3.0",
     "tsc": "^2.0.3",
     "typescript": "^4.3.2"
-  }
+  },
+  "keywords": [
+    "discord",
+    "interactions",
+    "discord-interactions",
+    "interactive-discord",
+    "slash-commands",
+    "discord-commands",
+    "discord-slash-commands",
+    "message-components",
+    "discord-message-components"
+  ]
 }
