@@ -105,7 +105,7 @@ export class InteractiveClient extends TypedEmitter<Events> {
       components: cluster.compile() as string,
     }
 
-    if (embeds) senderOpts.embeds = embeds;
+    if (embeds) senderOpts.embed = embeds;
 
     switch (channel.type) {
       case "text":
