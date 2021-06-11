@@ -2,7 +2,7 @@ import { SelectionComponent } from ".";
 import { TypedEmitter } from 'tiny-typed-emitter';
 import { Events } from "./util/types/events";
 import { Commands } from "./classes/Commands";
-import { getChannelPerms } from "./util/channel";
+import { getChannelPerms, getNewChannel } from "./util/channel";
 import { SlashCommand } from "./structures/SlashCommand";
 import compileComponents from "./util/compileComponents";
 import { ButtonListenerCallback } from "./util/types/button";
@@ -14,7 +14,8 @@ import { InteractionType, RawInteractionObject } from "./util/types/interactions
 import { ButtonInteractionController } from "./controllers/ButtonInteractionController";
 import { CommandInteractionController } from "./controllers/CommandInteractionController";
 import { SelectionInteractionController } from "./controllers/SelectionInteractionController";
-import { APIMessageContentResolvable, Client, Collection, DMChannel, MessageAdditions, MessageOptions, NewsChannel, TextChannel } from "discord.js";
+import { APIMessageContentResolvable, Client, Collection, MessageAdditions, MessageOptions, } from "discord.js";
+import { FetchMessageOptions } from "./util/types/other";
 
 export class InteractiveClient extends TypedEmitter<Events> {
   public bot: Client;
@@ -107,49 +108,12 @@ export class InteractiveClient extends TypedEmitter<Events> {
 
     if (embeds) senderOpts.embed = embeds;
 
-    switch (channel.type) {
-      case "text":
-        const newTextChannel = new TextChannel(channel.guild, {
-          type: channel.type,
-          topic: channel.topic,
-          rate_limit_per_user: channel.rateLimitPerUser,
-          position: channel.position,
-          permission_overwrites: getChannelPerms(channel),
-          nsfw: channel.nsfw,
-          name: channel.name,
-          last_message_id: channel.lastMessageID,
-          id: channel.id
+    const newChannel = getNewChannel(channel, this.bot);
+    newChannel.send(senderOpts);
+  }
 
-        })
-        newTextChannel.send(senderOpts);
-        break;
-
-      case "news":
-        const newNewsChannel = new NewsChannel(channel.guild, {
-          type: channel.type,
-          topic: channel.topic,
-          rate_limit_per_user: 0,
-          position: channel.position,
-          permission_overwrites: getChannelPerms(channel),
-          nsfw: channel.nsfw,
-          name: channel.name,
-          last_message_id: channel.lastMessageID,
-          id: channel.id
-        });
-        newNewsChannel.send(senderOpts)
-        break;
-
-      case "dm":
-        const newDmChannel = new DMChannel(this.bot, {
-          type: channel.type,
-          recipients: [channel.recipient.toJSON()],
-          last_message_id: channel.lastMessageID,
-          id: channel.id
-        })
-        newDmChannel.send(senderOpts);
-        break;
-
-    }
-
+  async fetchMessage({ channel, messageId }: FetchMessageOptions) {
+    const newChannel = getNewChannel(channel, this.bot);
+    return await newChannel.messages.fetch(messageId);
   }
 }

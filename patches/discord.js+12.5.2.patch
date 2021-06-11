@@ -19,7 +19,7 @@ index 3451bdb..be98887 100644
        avatar_url: avatarURL,
        allowed_mentions: typeof content === 'undefined' ? undefined : allowedMentions,
 diff --git a/node_modules/discord.js/src/structures/Message.js b/node_modules/discord.js/src/structures/Message.js
-index 36c26f2..61c715b 100644
+index 36c26f2..41ec6cd 100644
 --- a/node_modules/discord.js/src/structures/Message.js
 +++ b/node_modules/discord.js/src/structures/Message.js
 @@ -78,6 +78,15 @@ class Message extends Base {
@@ -66,11 +66,35 @@ index 36c26f2..61c715b 100644
        : null;
    }
  
+@@ -250,6 +259,7 @@ class Message extends Base {
+ 
+     if ('edited_timestamp' in data) this.editedTimestamp = new Date(data.edited_timestamp).getTime();
+     if ('content' in data) this.content = data.content;
++    if ('components' in data) this.components = data.components;
+     if ('pinned' in data) this.pinned = data.pinned;
+     if ('tts' in data) this.tts = data.tts;
+     if ('embeds' in data) this.embeds = data.embeds.map(e => new Embed(e, true));
+@@ -658,6 +668,7 @@ class Message extends Base {
+       this.id === message.id &&
+       this.author.id === message.author.id &&
+       this.content === message.content &&
++      this.components === message.components &&
+       this.tts === message.tts &&
+       this.nonce === message.nonce &&
+       this.embeds.length === message.embeds.length &&
 diff --git a/node_modules/discord.js/typings/index.d.ts b/node_modules/discord.js/typings/index.d.ts
-index e0be3c6..51f1081 100644
+index e0be3c6..8a851ff 100644
 --- a/node_modules/discord.js/typings/index.d.ts
 +++ b/node_modules/discord.js/typings/index.d.ts
-@@ -2832,13 +2832,14 @@ declare module 'discord.js' {
+@@ -972,6 +972,7 @@ declare module 'discord.js' {
+     public editedTimestamp: number | null;
+     public readonly edits: Message[];
+     public embeds: MessageEmbed[];
++    public components: any[];
+     public readonly guild: Guild | null;
+     public id: Snowflake;
+     public readonly member: GuildMember | null;
+@@ -2832,13 +2833,14 @@ declare module 'discord.js' {
      tts?: boolean;
      nonce?: string;
      content?: StringResolvable;
@@ -86,7 +110,7 @@ index e0be3c6..51f1081 100644
    }
  
    type MessageReactionResolvable = MessageReaction | Snowflake;
-@@ -2881,11 +2882,11 @@ declare module 'discord.js' {
+@@ -2881,11 +2883,11 @@ declare module 'discord.js' {
  
    type OverwriteType = 'member' | 'role';
  
@@ -101,7 +125,7 @@ index e0be3c6..51f1081 100644
  
    type PermissionResolvable = BitFieldResolvable<PermissionString>;
  
-@@ -2922,7 +2923,7 @@ declare module 'discord.js' {
+@@ -2922,7 +2924,7 @@ declare module 'discord.js' {
      | 'MANAGE_WEBHOOKS'
      | 'MANAGE_EMOJIS';
  
@@ -110,7 +134,7 @@ index e0be3c6..51f1081 100644
  
    type RecursiveReadonlyArray<T> = ReadonlyArray<T | RecursiveReadonlyArray<T>>;
  
-@@ -2956,16 +2957,16 @@ declare module 'discord.js' {
+@@ -2956,16 +2958,16 @@ declare module 'discord.js' {
      partial: true;
      fetch(): Promise<T>;
    } & {
@@ -134,7 +158,7 @@ index e0be3c6..51f1081 100644
      > {
      lastMessage: null;
      lastMessageID: undefined;
-@@ -2992,18 +2993,18 @@ declare module 'discord.js' {
+@@ -2992,18 +2994,18 @@ declare module 'discord.js' {
  
    interface PartialGuildMember
      extends Partialize<
@@ -165,7 +189,7 @@ index e0be3c6..51f1081 100644
      > {
      readonly bannable: boolean;
      readonly displayColor: number;
-@@ -3022,18 +3023,18 @@ declare module 'discord.js' {
+@@ -3022,18 +3024,19 @@ declare module 'discord.js' {
  
    interface PartialMessage
      extends Partialize<
@@ -193,6 +217,15 @@ index e0be3c6..51f1081 100644
 +    | 'flags'
 +    | 'edits'
 +    | 'embeds'
++    | 'components'
      > {
      attachments: Message['attachments'];
      channel: Message['channel'];
+@@ -3042,6 +3045,7 @@ declare module 'discord.js' {
+     readonly editable: boolean;
+     readonly edits: Message['edits'];
+     embeds: Message['embeds'];
++    components: Message['components'];
+     flags: Message['flags'];
+     mentions: Message['mentions'];
+     readonly pinnable: boolean;
