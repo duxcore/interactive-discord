@@ -14,7 +14,7 @@ import { InteractionType, RawInteractionObject } from "./util/types/interactions
 import { ButtonInteractionController } from "./controllers/ButtonInteractionController";
 import { CommandInteractionController } from "./controllers/CommandInteractionController";
 import { SelectionInteractionController } from "./controllers/SelectionInteractionController";
-import { APIMessageContentResolvable, Client, Collection, MessageAdditions, MessageOptions, } from "discord.js";
+import { APIMessageContentResolvable, Client, Collection, Message, MessageAdditions, MessageOptions, } from "discord.js";
 import { FetchMessageOptions } from "./util/types/other";
 
 export class InteractiveClient extends TypedEmitter<Events> {
@@ -112,7 +112,7 @@ export class InteractiveClient extends TypedEmitter<Events> {
     newChannel.send(senderOpts);
   }
 
-  async fetchMessage({ channel, messageId }: FetchMessageOptions) {
+  async fetchMessage({ channel, messageId }: FetchMessageOptions): Promise<Message> {
     const newChannel = getNewChannel(channel, this.bot);
     return await newChannel.messages.fetch(messageId);
   }
