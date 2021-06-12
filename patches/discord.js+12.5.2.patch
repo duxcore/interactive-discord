@@ -83,18 +83,75 @@ index 36c26f2..41ec6cd 100644
        this.nonce === message.nonce &&
        this.embeds.length === message.embeds.length &&
 diff --git a/node_modules/discord.js/typings/index.d.ts b/node_modules/discord.js/typings/index.d.ts
-index e0be3c6..8a851ff 100644
+index e0be3c6..2ca6fde 100644
 --- a/node_modules/discord.js/typings/index.d.ts
 +++ b/node_modules/discord.js/typings/index.d.ts
 @@ -972,6 +972,7 @@ declare module 'discord.js' {
      public editedTimestamp: number | null;
      public readonly edits: Message[];
      public embeds: MessageEmbed[];
-+    public components: any[];
++    public components: ComponentActionRow[];
      public readonly guild: Guild | null;
      public id: Snowflake;
      public readonly member: GuildMember | null;
-@@ -2832,13 +2833,14 @@ declare module 'discord.js' {
+@@ -1024,6 +1025,56 @@ declare module 'discord.js' {
+     public unpin(options?: { reason?: string }): Promise<Message>;
+   }
+ 
++  export class ComponentActionRow {
++    public type: 1;
++    public components: ComponentTypes[]
++  }
++
++  export class ButtonComponent {
++    public type: 2;
++    public custom_id?: string;
++    public style?: number;
++    public label?: string;
++    public disabled?: boolean;
++    public emoji?: EmojiPartial
++  }
++
++  export class LinkButtonComponent {
++    public type: 2;
++    public style?: 5;
++    public label?: string;
++    public disabled?: boolean;
++    public url?: string;
++  }
++
++  export class SelectionComponent {
++    public type: 3;
++    public placeholder?: string;
++    public custom_id?: string;
++    public min_values?: number;
++    public max_values?: number;
++    public options?: SelectionComponentOption[]
++  }
++
++  export interface SelectionComponentOption {
++    label?: string,
++    description?: string,
++    value?: string
++  }
++
++  export type ComponentTypes =
++    | ButtonComponent
++    | LinkButtonComponent
++    | ComponentActionRow
++    | SelectionComponent
++
++
++  export interface EmojiPartial {
++    name: string,
++    id: string,
++    animated: boolean
++  }
++
+   export class MessageAttachment {
+     constructor(attachment: BufferResolvable | Stream, name?: string, data?: object);
+ 
+@@ -2832,13 +2883,14 @@ declare module 'discord.js' {
      tts?: boolean;
      nonce?: string;
      content?: StringResolvable;
@@ -110,7 +167,7 @@ index e0be3c6..8a851ff 100644
    }
  
    type MessageReactionResolvable = MessageReaction | Snowflake;
-@@ -2881,11 +2883,11 @@ declare module 'discord.js' {
+@@ -2881,11 +2933,11 @@ declare module 'discord.js' {
  
    type OverwriteType = 'member' | 'role';
  
@@ -125,7 +182,7 @@ index e0be3c6..8a851ff 100644
  
    type PermissionResolvable = BitFieldResolvable<PermissionString>;
  
-@@ -2922,7 +2924,7 @@ declare module 'discord.js' {
+@@ -2922,7 +2974,7 @@ declare module 'discord.js' {
      | 'MANAGE_WEBHOOKS'
      | 'MANAGE_EMOJIS';
  
@@ -134,7 +191,7 @@ index e0be3c6..8a851ff 100644
  
    type RecursiveReadonlyArray<T> = ReadonlyArray<T | RecursiveReadonlyArray<T>>;
  
-@@ -2956,16 +2958,16 @@ declare module 'discord.js' {
+@@ -2956,16 +3008,16 @@ declare module 'discord.js' {
      partial: true;
      fetch(): Promise<T>;
    } & {
@@ -158,7 +215,7 @@ index e0be3c6..8a851ff 100644
      > {
      lastMessage: null;
      lastMessageID: undefined;
-@@ -2992,18 +2994,18 @@ declare module 'discord.js' {
+@@ -2992,18 +3044,18 @@ declare module 'discord.js' {
  
    interface PartialGuildMember
      extends Partialize<
@@ -189,7 +246,7 @@ index e0be3c6..8a851ff 100644
      > {
      readonly bannable: boolean;
      readonly displayColor: number;
-@@ -3022,18 +3024,19 @@ declare module 'discord.js' {
+@@ -3022,18 +3074,19 @@ declare module 'discord.js' {
  
    interface PartialMessage
      extends Partialize<
@@ -221,7 +278,7 @@ index e0be3c6..8a851ff 100644
      > {
      attachments: Message['attachments'];
      channel: Message['channel'];
-@@ -3042,6 +3045,7 @@ declare module 'discord.js' {
+@@ -3042,6 +3095,7 @@ declare module 'discord.js' {
      readonly editable: boolean;
      readonly edits: Message['edits'];
      embeds: Message['embeds'];
