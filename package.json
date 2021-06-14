@@ -2,7 +2,7 @@
   "name": "@duxcore/interactive-discord",
   "author": "Jackson Roberts <jackson@holopanio.com>",
   "description": "A package that will allow you to seamlessly integrate discord interactions into your bot.",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "license": "GPL-3.0",
   "main": "lib/index",
   "private": false,

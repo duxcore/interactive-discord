@@ -2,7 +2,7 @@ import { SelectionComponent } from ".";
 import { TypedEmitter } from 'tiny-typed-emitter';
 import { Events } from "./util/types/events";
 import { Commands } from "./classes/Commands";
-import { getChannelPerms, getNewChannel } from "./util/channel";
+import { getNewChannel } from "./util/channel";
 import { SlashCommand } from "./structures/SlashCommand";
 import compileComponents from "./util/compileComponents";
 import { ButtonListenerCallback } from "./util/types/button";
@@ -14,7 +14,7 @@ import { InteractionType, RawInteractionObject } from "./util/types/interactions
 import { ButtonInteractionController } from "./controllers/ButtonInteractionController";
 import { CommandInteractionController } from "./controllers/CommandInteractionController";
 import { SelectionInteractionController } from "./controllers/SelectionInteractionController";
-import { APIMessageContentResolvable, Client, Collection, Message, MessageAdditions, MessageOptions, } from "discord.js";
+import { APIMessageContentResolvable, Client, Collection, MessageAdditions, MessageOptions, MessageWithComponents, } from "discord.js";
 import { FetchMessageOptions } from "./util/types/other";
 
 export class InteractiveClient extends TypedEmitter<Events> {
@@ -112,8 +112,8 @@ export class InteractiveClient extends TypedEmitter<Events> {
     newChannel.send(senderOpts);
   }
 
-  async fetchMessage({ channel, messageId }: FetchMessageOptions): Promise<Message> {
+  async fetchMessage({ channel, messageId }: FetchMessageOptions): Promise<MessageWithComponents> {
     const newChannel = getNewChannel(channel, this.bot);
-    return await newChannel.messages.fetch(messageId);
+    return await newChannel.messages.fetch(messageId) as unknown as MessageWithComponents;
   }
 }
