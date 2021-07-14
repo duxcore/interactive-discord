@@ -81,6 +81,7 @@ export interface OptionsEntity {
   value: string;
   type: number;
   name: string;
+  options?: OptionsEntity[]
 }
 
 export enum InteractionType {
