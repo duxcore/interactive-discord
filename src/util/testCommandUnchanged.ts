@@ -10,7 +10,7 @@ export function testCommandUnchanged(command: SlashCommand, reference: Applicati
     (command.name == reference.name),
     (command.description == reference.description),
     (command.defaultPermission == reference.default_permission),
-    (!command.options.map((option, i) => Object.keys(option).map(key => option[key] === referenceOpts[i]?.[key]).includes(false)).includes(false)),
+    (!command.options.map((option, i) => Object.keys(option).map(key => option[key] !== referenceOpts[i]?.[key]).includes(false)).includes(false)),
     (command.options.length == referenceOpts.length),
   ]
 
