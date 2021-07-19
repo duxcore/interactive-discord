@@ -159,7 +159,7 @@ export interface WebhookResponseOptions {
   content?: string,
   embeds?: MessageEmbed[],
   file?: File;
-  payload_json: string;
+  payload_json?: string;
   allowed_mentions?: AllowedMentionsObj;
   attachments?: MessageAttachment[];
   components?: UniversalComponentType;
