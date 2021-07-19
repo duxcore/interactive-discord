@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { MessageAttachment, MessageEmbed } from "discord.js";
 import { ComponentObject, UniversalComponentType } from "./components";
 
 export interface RawInteractionObject {
@@ -141,5 +141,26 @@ export interface InteractionResponseOptions {
   components?: UniversalComponentType,
   allowedMentions?: AllowedMentionsObj,
   isPrivate?: boolean;
+  defer?: 'components' | 'message' | 'none';
   shouldEdit?: boolean
+}
+
+export interface WebhookResponseObject {
+  content?: string,
+  embeds?: MessageEmbed[],
+  file?: File;
+  payload_json?: string;
+  allowed_mentions?: AllowedMentionsObj;
+  attachments?: MessageAttachment[];
+  components?: ComponentObject[];
+}
+
+export interface WebhookResponseOptions {
+  content?: string,
+  embeds?: MessageEmbed[],
+  file?: File;
+  payload_json: string;
+  allowed_mentions?: AllowedMentionsObj;
+  attachments?: MessageAttachment[];
+  components?: UniversalComponentType;
 }

@@ -32,6 +32,12 @@ bot.once('ready', () => {
 
     const emoji = new SlashCommand({ name: 'emoji', description: 'Sends button components with emoji content' })
     interactiveClient.commands.register(emoji, myGuildId)
+
+    const defer_message = new SlashCommand({ name: 'defer-message', description: 'Sends a deferred interaction response' })
+    interactiveClient.commands.register(defer_message, myGuildId)
+
+    const defer_components = new SlashCommand({ name: 'defer-components', description: 'Sends a deferred component interaction response' })
+    interactiveClient.commands.register(defer_components, myGuildId)
 })
 
 interactiveClient.on("commandInteraction", (interaction) => {
@@ -175,6 +181,38 @@ interactiveClient.on("commandInteraction", (interaction) => {
                         shouldEdit: true
                     })
                 })
+                break;
+
+            case "defer-message":
+                interaction.respond({ defer: 'message' });
+
+                setTimeout(() => {
+                    interaction.editOrignal({
+                        content: 'I was editied in after 5 seconds!'
+                    })
+                }, 5000);
+
+                break;
+
+            case "defer-components":
+                const cluster = new ComponentCluster(primarybutton);
+                interactiveClient.addButtonListener(primarybutton, (interaction) => {
+                    interaction.respond({ defer: 'components' });
+
+                    const newCluster = new ComponentCluster(secondarybutton);
+                    setTimeout(() => {
+                        interaction.editOrignal({
+                            content: 'Components edited after 5 seconds without loading state',
+                            components: newCluster
+                        })
+                    }, 5000)
+                })
+
+                interaction.respond({
+                    content: 'Orignal message with components',
+                    components: cluster
+                })
+
                 break;
         }
     }

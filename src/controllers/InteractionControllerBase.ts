@@ -1,9 +1,10 @@
 import axios from 'axios';
-import { Channel, DMChannel, Guild, GuildMember, MessageEmbed, NewsChannel, TextChannel } from "discord.js";
+import { DMChannel, Guild, GuildMember, NewsChannel, TextChannel } from "discord.js";
 import { InteractiveClient } from "../InteractiveClient";
 import { InteractionResponse } from "../structures/InteractionResponse";
+import { WebhookResponse } from '../structures/WebhookResponse';
 import { discord } from '../util/constraints';
-import { InteractionResponseOptions, InteractionResponseType, Message, RawInteractionObject } from "../util/types/interactions";
+import { InteractionResponseOptions, InteractionResponseType, Message, RawInteractionObject, WebhookResponseOptions } from "../util/types/interactions";
 
 export class InteractionControllerBase {
   public client: InteractiveClient;
@@ -70,6 +71,17 @@ export class InteractionControllerBase {
     return new Promise((resolve, reject) => {
       const responseObject = new InteractionResponse(response);
       axios.post(`${discord.api_url}/interactions/${this.id}/${this.token}/callback`, responseObject.compile())
+        .then(dat => {
+          resolve()
+        })
+        .catch(dat => reject(dat));
+    })
+  }
+
+  editOrignal(response: WebhookResponseOptions): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const responseObject = new WebhookResponse(response);
+      axios.patch(`${discord.api_url}/webhooks/${this.client.bot.user?.id}/${this.token}/messages/@original`, responseObject.compile())
         .then(dat => {
           resolve()
         })

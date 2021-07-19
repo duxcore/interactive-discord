@@ -6,6 +6,7 @@ import { ComponentCluster } from "./ComponentCluster";
 export class InteractionResponse {
   private _useTTS: boolean;
   private _private: boolean;
+  private _defer: 'components' | 'message' | 'none';
   private _edit: boolean;
   private _type: InteractionResponseType;
 
@@ -17,6 +18,7 @@ export class InteractionResponse {
   constructor(options: InteractionResponseOptions) {
     this._useTTS = options.tts ?? false;
     this._private = options.isPrivate ?? false;
+    this._defer = options.defer ?? 'none';
     this._edit = options.shouldEdit ?? false;
     this._type = options.type ?? InteractionResponseType.ChannelMessageWithSource;
 
@@ -28,6 +30,7 @@ export class InteractionResponse {
 
   get useTTS(): boolean { return this._useTTS; }
   get isPrivate(): boolean { return this._private; }
+  get isDeferred(): 'components' | 'message' | 'none' { return this._defer; }
   get isEdit(): boolean { return this._edit; }
 
   get content(): string { return this._content; }
@@ -61,6 +64,8 @@ export class InteractionResponse {
     }
 
     if (this._private) responseObject.data.flags = MessageFlags.EPHEMERAL;
+    if (this._defer == 'message') responseObject.type = InteractionResponseType.DeferredChannelMessageWithSource;
+    if (this._defer == 'components') responseObject.type = InteractionResponseType.DeferredUpdateMessage;
     if (this._allowedMentions) responseObject.data.allowed_mentions = this._allowedMentions;
     if (this._components) {
       const compileComponents = ((): ComponentCluster => {
